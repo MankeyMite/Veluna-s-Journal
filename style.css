@@ -1,0 +1,656 @@
+/* ============================================================
+   THE FRAGMENTS OF VELUNA — Stylesheet
+   ============================================================
+   Fonts used:
+     - Caveat          → handwriting body text
+     - IM Fell English  → date headings, elegant serif
+     - Cinzel           → cover title, chapter labels
+   
+   To swap fonts: change the font-family values in the
+   :root custom properties below, and update the <link> in
+   index.html.
+   ============================================================ */
+
+/* ---------- Custom Properties ---------- */
+:root {
+  /* Typography */
+  --font-body: 'Caveat', cursive;
+  --font-heading: 'Cinzel', serif;
+  --font-date: 'IM Fell English', serif;
+
+  /* Palette — warm sepia tones */
+  --color-bg: #1a1611;
+  --color-page: #e8dcc8;
+  --color-page-dark: #d4c4a8;
+  --color-ink: #3a2f24;
+  --color-ink-faded: #7a6e5d;
+  --color-accent: #8b7355;
+  --color-cover: #4a3728;
+  --color-cover-dark: #2e2118;
+  --color-gold: #c9a84c;
+
+  /* Layout */
+  --journal-width: 580px;
+  --journal-height: 780px;
+  --page-padding: 50px 45px 40px 50px;
+  --border-radius: 4px 12px 12px 4px;
+
+  /* Animation */
+  --flip-duration: 0.6s;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Atmosphere / Background ---------- */
+/* 
+   BACKGROUND IMAGE: Place your image in assets/bg.jpg (or .png)
+   and it will be used automatically. The fallback is a warm
+   radial gradient. Recommended: a soft sunlit riverside scene,
+   slightly blurred, ~1920x1080 or larger.
+*/
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  /* Fallback gradient — shows if no bg image */
+  background:
+    radial-gradient(ellipse at 50% 30%, #2a2218 0%, #0f0d0a 100%);
+  /* Background image — your scene picture */
+  background-image: url('assets/Images/Fragments%20of%20Veluna.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Soft blur so the background doesn't compete with the journal */
+  filter: blur(4px);
+  /* Scale up slightly to hide blurred edges */
+  transform: scale(1.05);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Warm overlay to unify the background with the journal palette */
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 22, 17, 0.25);
+  pointer-events: none;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- Journal Container ---------- */
+.journal {
+  position: relative;
+  width: var(--journal-width);
+  height: var(--journal-height);
+  z-index: 10;
+  perspective: 1800px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---------- Click Zones (left/right page edges) ---------- */
+.click-zone {
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  z-index: 30;
+  cursor: pointer;
+}
+.click-zone--left {
+  left: 0;
+}
+.click-zone--right {
+  right: 0;
+}
+
+/* ---------- Page Wrapper ---------- */
+.page-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Pages ---------- */
+.page {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: left center;
+  /* Paper texture via CSS */
+  background:
+    /* subtle noise */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(0,0,0,0.015) 28px,
+      rgba(0,0,0,0.015) 29px
+    ),
+    /* warm paper gradient */
+    linear-gradient(
+      170deg,
+      var(--color-page) 0%,
+      var(--color-page-dark) 60%,
+      #c8b898 100%
+    );
+  box-shadow:
+    2px 3px 12px rgba(0,0,0,0.35),
+    inset -2px 0 8px rgba(0,0,0,0.06),
+    inset 0 0 40px rgba(139,115,85,0.08);
+}
+
+/* Faint stain / imperfections overlay */
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 70%, rgba(120,100,60,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(100,80,40,0.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 60% 90%, rgba(80,60,30,0.04) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* Spine edge shadow */
+.page::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.12), transparent);
+  pointer-events: none;
+}
+
+/* Inner padding container */
+.page__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: var(--page-padding);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Content styles */
+.page__content {
+  flex: 1;
+  overflow: hidden;
+  line-height: 1.7;
+  font-size: 1.3rem;
+}
+
+/* ---------- Page State Classes ---------- */
+.page--current {
+  z-index: 15;
+}
+
+.page--flip {
+  z-index: 20;
+  transition: transform var(--flip-duration) ease-in-out;
+  pointer-events: none;
+}
+
+.page--flip.flipping-forward {
+  animation: flipForward var(--flip-duration) ease-in-out forwards;
+}
+
+.page--flip.flipping-backward {
+  animation: flipBackward var(--flip-duration) ease-in-out forwards;
+}
+
+/* ---------- Flip Animations ---------- */
+/* Smooth easing curve to avoid abrupt start/end */
+@keyframes flipForward {
+  0% {
+    transform: rotateY(0deg) scale(1);
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.35);
+  }
+  30% {
+    transform: rotateY(-50deg) scale(1.02);
+    box-shadow: -6px 6px 25px rgba(0,0,0,0.5);
+  }
+  70% {
+    transform: rotateY(-130deg) scale(1.02);
+    box-shadow: -4px 4px 20px rgba(0,0,0,0.45);
+  }
+  100% {
+    transform: rotateY(-180deg) scale(1);
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.35);
+  }
+}
+
+@keyframes flipBackward {
+  0% {
+    transform: rotateY(-180deg) scale(1);
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.35);
+  }
+  30% {
+    transform: rotateY(-130deg) scale(1.02);
+    box-shadow: -6px 6px 25px rgba(0,0,0,0.5);
+  }
+  70% {
+    transform: rotateY(-50deg) scale(1.02);
+    box-shadow: -4px 4px 20px rgba(0,0,0,0.45);
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.35);
+  }
+}
+
+/* ---------- Cover Page Style ---------- */
+.page--cover {
+  background:
+    linear-gradient(
+      160deg,
+      var(--color-cover) 0%,
+      var(--color-cover-dark) 70%,
+      #1c140e 100%
+    );
+  box-shadow:
+    3px 4px 16px rgba(0,0,0,0.5),
+    inset 0 0 60px rgba(0,0,0,0.3),
+    inset 2px 2px 4px rgba(201,168,76,0.08);
+}
+
+.page--cover::before {
+  background:
+    radial-gradient(ellipse at 40% 50%, rgba(201,168,76,0.06) 0%, transparent 60%);
+}
+
+.page--cover::after {
+  background: linear-gradient(to right, rgba(0,0,0,0.2), transparent);
+}
+
+.page--cover .page__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--color-gold);
+}
+
+/* ---------- Content Typography ---------- */
+
+/* Cover title */
+.cover-title {
+  font-family: var(--font-heading);
+  font-size: 2.1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  margin-bottom: 12px;
+}
+
+.cover-subtitle {
+  font-family: var(--font-date);
+  font-style: italic;
+  font-size: 1rem;
+  color: #a08860;
+  letter-spacing: 0.05em;
+}
+
+.cover-ornament {
+  margin: 24px 0;
+  font-size: 1.6rem;
+  opacity: 0.4;
+  color: var(--color-gold);
+}
+
+/* Entry date heading */
+.entry-date {
+  font-family: var(--font-date);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--color-ink-faded);
+  margin-bottom: 16px;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding-bottom: 8px;
+}
+
+/* Entry title */
+.entry-title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  letter-spacing: 0.07em;
+  margin-bottom: 14px;
+  color: var(--color-ink);
+}
+
+/* Body text */
+.entry-body {
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+}
+
+.entry-body p {
+  margin-bottom: 12px;
+}
+
+/* Emphasized / key lines */
+.faded-ink {
+  color: var(--color-ink-faded);
+  font-style: italic;
+}
+
+.emphasis-line {
+  font-weight: 600;
+  font-size: 1.35rem;
+  position: relative;
+  display: inline-block;
+  color: #2e2518;
+}
+
+/* Subtle underline on emphasis */
+.emphasis-line::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(58,47,36,0.3),
+    transparent
+  );
+}
+
+/* Faded note style */
+.margin-note {
+  font-size: 1rem;
+  color: var(--color-ink-faded);
+  font-style: italic;
+  margin-top: 16px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(139,115,85,0.2);
+}
+
+/* Final page styling */
+.final-page .entry-body {
+  font-style: italic;
+  color: var(--color-ink-faded);
+}
+
+.final-page .emphasis-line {
+  color: var(--color-ink);
+}
+
+/* ---------- Page Illustrations ---------- */
+/*
+   Small paintings / sketches embedded in journal pages.
+   Add "illustration" to a page's data object in script.js.
+   Images should be placed in the assets/ folder.
+   Recommended size: 200–400px wide, PNG with transparency
+   or soft-edged JPG to blend with the paper.
+*/
+.page-illustration {
+  text-align: center;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.page-illustration img {
+  max-width: 65%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 4px;
+  /* Blend into the aged paper */
+  opacity: 0.82;
+  filter: sepia(0.2) saturate(0.85) contrast(0.95);
+  /* Soft torn-edge feel */
+  mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  transition: opacity 0.3s;
+}
+
+.page-illustration img:hover {
+  opacity: 0.95;
+}
+
+/* Position: top — illustration above the text */
+.page-illustration--top {
+  margin-top: 0;
+  margin-bottom: 16px;
+  order: -1;
+}
+
+/* Position: center — illustration mid-page (use with short text) */
+.page-illustration--center {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* Caption under the illustration */
+.illustration-caption {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-ink-faded);
+  font-style: italic;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+/* On mobile, make illustrations a bit larger relative to the page */
+@media (max-width: 480px) {
+  .page-illustration img {
+    max-width: 80%;
+    max-height: 140px;
+  }
+}
+
+/* ---------- Navigation Buttons ---------- */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(74, 55, 40, 0.6);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--color-gold);
+  width: 40px;
+  height: 60px;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 40;
+  transition: opacity 0.3s, background 0.3s;
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.nav-btn:hover {
+  opacity: 1;
+  background: rgba(74, 55, 40, 0.85);
+}
+
+.nav-btn:disabled {
+  opacity: 0.15;
+  cursor: default;
+  pointer-events: none;
+}
+
+.nav-btn--prev {
+  left: -55px;
+}
+
+.nav-btn--next {
+  right: -55px;
+}
+
+/* ---------- Page Counter ---------- */
+.page-counter {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-date);
+  font-size: 0.8rem;
+  color: rgba(160,136,96,0.5);
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Hint ---------- */
+.hint {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-date);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(160,136,96,0.45);
+  z-index: 50;
+  pointer-events: none;
+  transition: opacity 1.5s ease;
+}
+
+.hint.hidden {
+  opacity: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Tablets and smaller desktops */
+@media (max-width: 750px) {
+  :root {
+    --journal-width: 92vw;
+    --journal-height: 85vh;
+    --page-padding: 36px 30px 30px 36px;
+  }
+
+  .page__content {
+    font-size: 1.15rem;
+  }
+
+  .cover-title {
+    font-size: 1.7rem;
+  }
+
+  .nav-btn--prev {
+    left: -8px;
+    opacity: 0.35;
+    width: 32px;
+    height: 48px;
+    font-size: 0.8rem;
+  }
+  .nav-btn--next {
+    right: -8px;
+    opacity: 0.35;
+    width: 32px;
+    height: 48px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  :root {
+    --journal-width: 96vw;
+    --journal-height: 88vh;
+    --page-padding: 28px 22px 22px 28px;
+  }
+
+  .page__content {
+    font-size: 1.05rem;
+  }
+
+  .entry-body {
+    font-size: 1.1rem;
+    line-height: 1.65;
+  }
+
+  .cover-title {
+    font-size: 1.4rem;
+  }
+
+  .cover-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .nav-btn {
+    width: 28px;
+    height: 42px;
+    font-size: 0.7rem;
+  }
+
+  .nav-btn--prev { left: 2px; }
+  .nav-btn--next { right: 2px; }
+
+  .click-zone {
+    width: 45px;
+  }
+
+  .page-counter {
+    font-size: 0.7rem;
+    bottom: -24px;
+  }
+}
+
+/* Very tall / narrow phones */
+@media (max-height: 600px) {
+  :root {
+    --journal-height: 92vh;
+    --page-padding: 20px 18px 16px 20px;
+  }
+}
+
+/* ---------- (Page settle removed — layered flip is seamless) ---------- */
+
+/* ---------- Accessibility: focus outlines ---------- */
+.click-zone:focus-visible,
+.nav-btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Print (just in case) ---------- */
+@media print {
+  .atmosphere, .vignette, .nav-btn, .click-zone, .hint, .page-counter { display: none; }
+  .journal { width: 100%; height: auto; }
+  .page { position: relative; page-break-after: always; box-shadow: none; }
+}

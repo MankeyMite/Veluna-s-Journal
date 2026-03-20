@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Fragments of Veluna</title>
+
+  <!-- Google Fonts: handwriting + elegant heading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== Background atmosphere ===== -->
+  <div class="atmosphere"></div>
+  <div class="vignette"></div>
+
+  <!-- ===== Main journal container ===== -->
+  <div id="journal" class="journal" role="main" aria-label="Veluna's Journal">
+
+    <!-- Left click-zone for previous page -->
+    <div class="click-zone click-zone--left" aria-label="Previous page" role="button" tabindex="0"></div>
+
+    <!-- Page wrapper – holds the visible page + flip animation -->
+    <div class="page-wrapper">
+
+      <!-- Current page (always shows destination content) -->
+      <div id="page-current" class="page page--current">
+        <div class="page__inner">
+          <div class="page__content"></div>
+        </div>
+      </div>
+
+      <!-- Flipping page (animates during transition) -->
+      <div id="page-flip" class="page page--flip" aria-hidden="true">
+        <div class="page__inner">
+          <div class="page__content"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right click-zone for next page -->
+    <div class="click-zone click-zone--right" aria-label="Next page" role="button" tabindex="0"></div>
+
+    <!-- Navigation arrows -->
+    <button id="btn-prev" class="nav-btn nav-btn--prev" aria-label="Previous page">&#9664;</button>
+    <button id="btn-next" class="nav-btn nav-btn--next" aria-label="Next page">&#9654;</button>
+
+    <!-- Page counter -->
+    <div id="page-counter" class="page-counter" aria-live="polite"></div>
+
+  </div>
+
+  <!-- Subtle instruction hint (fades out) -->
+  <div id="hint" class="hint">Click the edges or use arrow keys to turn pages</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
