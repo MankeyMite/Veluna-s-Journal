@@ -6,13 +6,11 @@
    ────────────────────────────
    All page content lives in the PAGES array below. Each entry
    is an object with these fields:
-   
-     {
-       type:  "cover" | "entry" | "final"
-       date:  (optional) date string shown at top of page
-       title: (optional) entry title / heading
-       body:  HTML string — the main text content
-       css:   (optional) extra CSS class for the page
+    `,
+
+  },
+
+  // ── ENTRY 2 ────────────────────────────────────────────────
      }
    
    PAGE CAPACITY GUIDE:
@@ -60,20 +58,18 @@ const PAGES = [
     body: `
       <p class="margin-note">
         The following pages were discovered inside a water-stained
-        leather journal, bound with twine and sealed with wax.
-        The cover bore no name. Only a crescent moon, pressed
-        into the leather with something sharp.
+        leather journal, bound inside a scarf.
+        The name Veluna was carved into the leather.
       </p>
       <br/>
       <p class="faded-ink">
-        Several pages are missing. What remains is transcribed here,
-        in the order they were found. Some ink has bled beyond
-        reading. We have done our best.
+        I found this empty journal by the sea.
+Maybe if I begin writing my thoughts down, they will stop circling inside me.
+Maybe it will help me understand who I am.
       </p>
 
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Hatched egg.png" alt="Hatched egg sketch" draggable="false" />
-        <span class="illustration-caption">A small hatched egg</span>
       </div>
     `
   },
@@ -96,10 +92,9 @@ I still keep that piece with me. Sometimes I wonder if that was all I was ever m
 
       
     `
-  },
 
   // ── ENTRY 2 ────────────────────────────────────────────────
-  {
+  ,
     type: "entry",
     date: "Day 2 — The City and the Sea",
     body: `
@@ -123,7 +118,6 @@ It is a comforting thought.</p>
 I wonder what it feels like to be looked at that way.
 I wonder what my own name would have been, if someone had stayed long enough to give me one.
 <br/>
-<br/>
 <p>
 The moon was beautiful tonight. I watched it spread silver across the sea, and for the first time, I felt that perhaps a name does not always have to be given. Perhaps sometimes it can be chosen.
 So I have chosen one for myself.
@@ -131,7 +125,12 @@ So I have chosen one for myself.
 <p>
 From now on, my name is <p class="emphasis-line">Veluna.</p>
 
-    `
+    `,
+    illustration: "assets/Images/Half moon.png",
+    illustrationAlt: "Half moon sketch",
+    illustrationCaption: "",
+    illustrationPos: "overlay",
+    css: "overlay"
   },
 
   // ── ENTRY 4 ────────────────────────────────────────────────
@@ -454,6 +453,56 @@ For now, it is enough for me to keep going...
   let compiledPages = [];
   let totalPages = 0;
 
+  // -----------------------------
+  // Secret page mechanics
+  // -----------------------------
+  let secretUnlocked = false;
+  const SECRET_PAGE = {
+    type: "entry",
+    css: "secret",
+    body: `
+      <p class="emphasis-line">A hidden fragment reads:</p>
+      <p class="margin-note">Glints of moonlight, a half-hidden name. Find the halves.</p>
+      <p class="emphasis-line">Species: <strong>— reveal by playing the tone —</strong></p>
+    `
+  };
+
+  // Play a short tone using WebAudio (runs on a user gesture)
+  function playSecretTone() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AC();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = 880; // higher pitch for a "reveal"
+      o.connect(g);
+      g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.02);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+      o.stop(ctx.currentTime + 0.65);
+    } catch (e) {
+      // ignore audio errors
+    }
+  }
+
+  function unlockSecretPage() {
+    if (secretUnlocked) return;
+    secretUnlocked = true;
+    const insertionIndex = Math.min(currentIndex + 1, compiledPages.length);
+    compiledPages.splice(insertionIndex, 0, SECRET_PAGE);
+    totalPages = compiledPages.length;
+    updateNav();
+    // brief toast/hint
+    hint.textContent = 'A fragment shifts, revealing something hidden.';
+    hint.classList.remove('hidden');
+    setTimeout(() => hint.classList.add('hidden'), 3200);
+    // navigate to the newly added secret page
+    goNext();
+  }
+
   // ── Build page HTML from data ──
   function renderPageHTML(pageData) {
     if (!pageData) return "";
@@ -522,6 +571,20 @@ For now, it is enough for me to keep going...
       content.innerHTML = "";
     }
     applyPageType(pageEl, data);
+
+    // Attach overlay illustration click hook (plays tone and unlocks secret)
+    try {
+      const overlayImgs = pageEl.querySelectorAll('.page-illustration--overlay img');
+      overlayImgs.forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', (e) => {
+          // start ambient audio if necessary (unlock audio policy)
+          startAmbientAudio();
+          playSecretTone();
+          unlockSecretPage();
+        }, { once: true });
+      });
+    } catch (e) { /* ignore */ }
   }
 
   // ── Update navigation state ──

@@ -45,6 +45,14 @@
   --final-illustration-translateX: -50%;
   --final-illustration-opacity: 1;
   --final-illustration-z: 8;
+  /* Generic overlay illustration controls (for non-final pages) */
+  --overlay-illustration-max-width: 46%;
+  --overlay-illustration-max-height: 220px;
+  --overlay-illustration-bottom: 8px;
+  --overlay-illustration-left: 50%;
+  --overlay-illustration-translateX: -45%;
+  --overlay-illustration-opacity: 1;
+  --overlay-illustration-z: 6;
 }
 
 /* ---------- Reset & Base ---------- */
@@ -573,6 +581,8 @@ body {
   box-shadow: none;
   transition: transform 0.18s ease, opacity 0.18s;
   transform-origin: center bottom;
+  pointer-events: auto; /* allow clicking the image itself */
+  cursor: pointer;
 }
 
 @media (max-width: 750px) {
@@ -581,6 +591,47 @@ body {
     max-width: 92%;
   }
 }
+
+/* Overlay illustrations inside pages when page content has `.overlay` class */
+.page__content.overlay { position: relative; }
+.page__content.overlay .page-illustration {
+  position: absolute;
+  left: var(--overlay-illustration-left);
+  bottom: var(--overlay-illustration-bottom);
+  transform: translateX(var(--overlay-illustration-translateX));
+  pointer-events: none;
+  z-index: var(--overlay-illustration-z);
+  width: 100%;
+  text-align: center;
+}
+.page__content.overlay .page-illustration img {
+  max-width: var(--overlay-illustration-max-width);
+  max-height: var(--overlay-illustration-max-height);
+  opacity: var(--overlay-illustration-opacity);
+  display: inline-block;
+  pointer-events: auto; /* image should receive clicks even if wrapper is pointer-events:none */
+  cursor: pointer;
+}
+
+/* Secret page styling */
+.page__content.secret {
+  text-align: center;
+}
+.page__content.secret .entry-body {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--color-ink);
+}
+.page__content.secret .emphasis-line {
+  font-size: 1.4rem;
+  color: var(--color-ink);
+}
+.page__content.secret strong {
+  background: linear-gradient(90deg, rgba(201,168,76,0.12), transparent);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
 
 @media (max-width: 480px) {
   .final-page .page-illustration img {
