@@ -370,6 +370,48 @@ body {
   margin-bottom: 12px;
 }
 
+/* Closing / signature inline row (right-aligned on same line) */
+.closing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+.closing-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-ink);
+}
+.signature-inline {
+  flex: 0 0 auto;
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: var(--color-ink);
+  opacity: 0.95;
+}
+.signature-inline .name {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* When the closing is a single paragraph, make it a flex container */
+.closing {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+@media (max-width: 480px) {
+  .closing-row { display: block; }
+  .closing { display: block; }
+  .signature-inline { text-align: left; margin-top: 8px; display: block; }
+}
+
 /* Emphasized / key lines */
 .faded-ink {
   color: var(--color-ink-faded);
@@ -482,6 +524,57 @@ body {
   .page-illustration img {
     max-width: 80%;
     max-height: 140px;
+  }
+}
+
+/* Final page: keep illustration inside the page and scale to fit */
+.page--final {
+  /* Keep the final page clipped so the image remains inside the page bounds */
+  overflow: hidden;
+}
+.page--final .page__inner,
+.page--final .page__content {
+  overflow: hidden;
+}
+.final-page .page-illustration {
+  position: relative;
+  display: block;
+  margin-top: 12px; /* tweak to move image down/up inside the page */
+  margin-bottom: 8px;
+}
+.final-page .page-illustration img {
+  display: block;
+  margin: 0 auto;
+  max-width: 86%;      /* Try increasing/decreasing this */
+  max-height: 320px;   /* Change this to make the image taller/shorter */
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  opacity: 1;
+  filter: none;
+  mask-image: none;
+  -webkit-mask-image: none;
+  border-radius: 4px;
+  box-shadow: none;
+  transition: transform 0.2s ease, opacity 0.2s;
+  transform-origin: center top;
+  transform: none; /* no large scale; keep it inside the page */
+  position: relative;
+  z-index: 2; /* ensure it sits above the page background */
+
+}
+
+@media (max-width: 750px) {
+  .final-page .page-illustration img {
+    max-height: 220px;
+    max-width: 92%;
+  }
+}
+
+@media (max-width: 580px) {
+  .final-page .page-illustration img {
+    max-height: 140px;
+    max-width: 94%;
   }
 }
 

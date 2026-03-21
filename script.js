@@ -23,6 +23,12 @@
      • A date + title takes about 2 lines of space
      • Using <p> tags adds small gaps between paragraphs
    
+   AUTO-OVERFLOW: If an entry is too long for one page, it
+   will automatically split across multiple pages at <p>
+   boundaries. The date/title only shows on the first page.
+   Just write as much as you want — no need to manually
+   split entries!
+   
    On mobile the text is slightly smaller so more fits, but
    always test on both screen sizes.
    
@@ -44,7 +50,7 @@ const PAGES = [
       <div class="cover-ornament">☽</div>
       <h1 class="cover-title">Veluna's Journal</h1>
       <div class="cover-ornament">— ✦ —</div>
-      <p class="cover-subtitle">Found among the stones at Drifthollow Point</p>
+      <p class="cover-subtitle">Searching for answers..</p>
     `
   },
 
@@ -64,6 +70,11 @@ const PAGES = [
         in the order they were found. Some ink has bled beyond
         reading. We have done our best.
       </p>
+
+      <div class="page-illustration page-illustration--bottom">
+        <img src="assets/Images/Hatched egg.png" alt="Hatched egg sketch" draggable="false" />
+        <span class="illustration-caption">A small hatched egg</span>
+      </div>
     `
   },
 
@@ -72,221 +83,236 @@ const PAGES = [
     type: "entry",
     date: "Day 1 — The Arrival",
     body: `
-      <p>The boat left me at the old dock just before sundown.
-      I could see the keeper's cottage up the hill, its windows
-      dark. The wind carried salt and something else — something
-      that smelled like old flowers left too long in still water.</p>
+      <p>
+I do not think eggs are supposed to sound the way mine did.
+Before I opened my eyes, I think something was already wrong. I remember the shell trembling at strange times, as though it feared what it carried. When I finally woke, the world had already been moving without me for some time. The shell around me had gone cold.
+On one of the broken pieces, there was a number carved so neatly that it could not have belonged to chance:
+<p class="emphasis-line">38114.</p>
+<br/>
+<br/>
+<p>
+I still keep that piece with me. Sometimes I wonder if that was all I was ever meant to be. Not held. Not named. Only counted. I am hoping the number means more than I can read from it alone. Maybe if I learn more about who I am, it will begin to make sense somehow.
+</p>
 
-      <p>I told myself this was just a research posting. Catalogue
-      the local wildlife. Document the tides. File reports that
-      no one would ever read.</p>
-
-      <p>But the way the ferryman looked at me when I stepped
-      off — like I was already a ghost — I cannot forget it.</p>
-
-      <p class="faded-ink">I will not be afraid of a quiet place.</p>
+      
     `
   },
 
   // ── ENTRY 2 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 4 — The Tidepools",
+    date: "Day 2 — The City and the Sea",
     body: `
-      <p>Spent the morning mapping the tidepools along the
-      northern shelf. The creatures here are remarkably gentle.
-      Small round things, pink and pale, that seem to hum when
-      the light catches them. I've never seen anything quite
-      like them in any field guide.</p>
+      <p>The others seem so natural. So certain. Their lives fit around them neatly, as though they were born already knowing what shape they were meant to take. I do not have that feeling. I feel as though I arrived from somewhere else. Somewhere colder, stranger. Sometimes, when I close my eyes, I almost remember waking to something black and white before I found myself here. I do not understand that memory, only that it frightens me.
+<br/>
+<br/>
+<p>
+There was a scarf lying beside the shell when I woke.
 
-      <p>One followed me back along the rocks. It sat at the
-      edge of the water and watched me climb the path. When I
-      turned around, it was gone.</p>
-
-      <p class="emphasis-line">I swear it was smiling.</p>
-
-      <p>I need to sketch them properly tomorrow. My notes
-      feel insufficient. Some things resist description.</p>
+I have wrapped it around myself ever since. I do not know who it belonged to, but I have decided it must matter. I have chosen to believe it was not left behind by accident. Perhaps it belongs to the one who brought me here. Perhaps they will return for it one day, and when they do, I will tell them everything. I will show them how carefully I kept it folded, how I tried to stay clean, how I waited.
+It is a comforting thought.</p>
     `
   },
 
   // ── ENTRY 3 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 9 — The Singing",
+    date: "Day 3 — The Moon and a name",
     body: `
-      <p>I heard it again last night — a low, melodic sound
-      drifting up from the shore. Not wind. Not waves. Something
-      with breath. Something with intention.</p>
+      <p>At night I like to hide beneath the bridge. Sometimes I sit in the bushes nearby and watch young trainers testing their strength against the girl who stands there. She speaks to her companions so gently. She looks at them as though they belong beside her. I try not to stare, but I always do.
+I wonder what it feels like to be looked at that way.
+I wonder what my own name would have been, if someone had stayed long enough to give me one.
+<br/>
+<br/>
+<p>
+The moon was beautiful tonight. I watched it spread silver across the sea, and for the first time, I felt that perhaps a name does not always have to be given. Perhaps sometimes it can be chosen.
+So I have chosen one for myself.
+<br/>
+<p>
+From now on, my name is <p class="emphasis-line">Veluna.</p>
 
-      <p>I followed it to the edge of the cliff and looked down.
-      The moonlight was painting everything silver. The sea was
-      impossibly still, like glass laid over darkness.</p>
-
-      <p>And there, on the rocks below, a shape. Pale. Round.
-      Luminous. It was one of them, the tidepool creatures, but
-      far larger than any I had seen. It sat perfectly still,
-      facing the moon.</p>
-
-      <p class="faded-ink">It was singing to the moon. I'm sure of it.</p>
     `
   },
 
   // ── ENTRY 4 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 15 — Names",
+    date: "Day 4 — A fulfilling silence",
     body: `
-      <p>I have started giving them names. I know a researcher
-      shouldn't, but they come to the same spots each morning,
-      and each one is different — different markings, different
-      temperaments, different songs.</p>
-
-      <p>The small pale one I call Muina. She always waits near
-      the third pool, the deep one shaped like an eye. She lets
-      me sit beside her. She tilts her head when I speak.</p>
-
-      <p>The large one — the singer from the cliff — I have not
-      named. I feel like she already has a name. I just haven't
-      learned it yet.</p>
-
-      <p class="margin-note">Drew a sketch here — see next page.
-      [page missing]</p>
+      <p>Something was crying near the rocks tonight.
+At first I thought it was only the wind moving through the hollows, but when I followed the sound, I found a small creature curled tightly against the stone, trembling in a way that seemed deeper than cold. It was not just its body that hurt. Something inside it was restless, tangled, afraid.
+I did not know what to do.
+So I sat beside it and listened.
+That is when the sound came from me.
+Not from my mouth at first, but from somewhere deeper, as though a note had been waiting inside my ribs for the right silence to wake it. Clear, soft, and round, like the ringing of something delicate and silver. The creature lifted its head at once. Its breathing slowed. The trembling eased little by little, until at last it rested.
+I do not know how I made that sound.
+But afterward, the air around us felt cleaner somehow, as though something heavy had loosened and drifted away.
+For a little while, neither of us was afraid.</p>
     `
   },
 
   // ── ENTRY 5 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 22 — The Eggs",
+    date: "Day 5 — A hidden protector",
     body: `
-      <p>Found something extraordinary today. In the deepest
-      tidepool, tucked beneath an overhang of rock and kelp,
-      there are eggs. Dozens of them. Soft, translucent, faintly
-      glowing with a warmth I could feel through my fingertips
-      without touching them.</p>
+      <p>There is a part of last night I cannot remember.
+I have tried to place it in order, but it breaks apart every time I get close, like wet paper in trembling hands. I remember the path. 
+I remember footsteps. I remember the feeling of being watched too closely, with the kind of attention that does not feel like kindness. I remember backing away.
+Then I remember nothing. Only what came after. 
+<br/>
+<br/>
+<p>
+The earth was torn where I stood. The air smelled sharp, as though something violent had split through it. The one who had come near me was lying several steps away, staring not with anger, but with the wide, hollow fear of someone who has seen something they do not understand.
+No one has come close in quite the same way since.
+I wish I knew what happened in that missing space. I wish I could say it was not me. But somewhere inside myself, when I think too long about it, I feel the shape of an answer I do not want.
+</p>
 
-      <p>The creatures gathered around me as I knelt there.
-      Not threatening. Watchful. Patient.</p>
-
-      <p>They were showing me.</p>
-
-      <p class="emphasis-line">They wanted me to see.</p>
-
-      <p class="faded-ink">I think they trust me. I don't know
-      what I've done to deserve it.</p>
+     </p>
     `
   },
 
   // ── ENTRY 6 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 30 — The Storm",
+    date: "",
     body: `
-      <p>A terrible storm came in from the west. Three days of
-      black sky and howling wind. The cottage shook. Tiles flew
-      from the roof. I huddled by the fire and thought of home,
-      wherever that is now.</p>
-
-      <p>When it passed, I ran to the shore.</p>
-
-      <p>The tidepools were shattered. The rocks rearranged by
-      the force of the waves. Kelp and debris everywhere.</p>
-
-      <p>I searched for hours. I found Muina first, sheltered in
-      a crevice, trembling. She pressed against my hand.</p>
-
-      <p class="faded-ink">The eggs were gone. Every single one.
-      Swept out to sea, or buried, or broken. I cannot tell.
-      The large one sat at the water's edge, silent.</p>
+      <p>
+I think there is something in me that wakes only when I am struck.
+Not rage. Not hatred.
+Something older than choice.
+Something that does not protect me gently.
+I am frightened of how completely my body can answer without asking me first.
+And more frightened still that, when it was over, part of me felt relieved. </p>
     `
   },
 
   // ── ENTRY 7 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 31 — Silence",
+    date: "Day 6 — The Sound from within",
     body: `
-      <p>No singing last night. No humming in the pools at dawn.
-      No pale shapes on the rocks at dusk.</p>
-
-      <p>Just the waves. Just the wind.</p>
-
-      <p>I walked the entire shoreline twice. I called for them.
-      I know how that sounds. A researcher, on a cliff, calling
-      out to creatures that have no language I can name.</p>
-
-      <p>But I called anyway.</p>
-
-      <p class="emphasis-line">No one answered.</p>
-
-      <p class="faded-ink">The silence here is not peaceful.
-      It is the silence of something missing.</p>
+      <p>The sea was restless for most of the evening, but by night it had quieted into something softer. I sat where the stones were still warm from the day and watched the moon scatter itself across the water in pale pieces.
+I do not know how long I stayed there.
+Long enough that my thoughts began to feel heavier than they should have. Long enough that the silence stopped feeling empty and started feeling like something I could lean against. There are nights when the loneliness sits beside me so gently that I almost mistake it for peace.
+Tonight was one of them.
+At some point, a sound left me.
+Not a word. Not anything I meant to say. Only a low, drifting thing that seemed to carry itself once it had begun, as though it had already existed somewhere inside me and had only been waiting for the dark to loosen it. I barely recognized it as mine.
+After that, everything seemed to change a little.</p>
     `
   },
 
   // ── ENTRY 8 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 38 — A Small Return",
+    date: "",
     body: `
-      <p>Muina came back. Just her, alone, sitting at the third
-      pool at sunrise. She looked thinner. Her glow was faint.</p>
-
-      <p>I sat with her all morning. I didn't write. I didn't
-      catalogue. I just sat, and let the waves speak for us both.</p>
-
-      <p>When the tide came in, she slipped into the water and
-      drifted out, slowly, like a lantern set upon a dark river.</p>
-
-      <p>She looked back once.</p>
-
-      <p class="margin-note">I think she was saying goodbye.
-      I think they all were, in their own way, and I was too
-      busy taking notes to hear it.</p>
+      <p>The wind thinned. The small noises in the grass faded. Even the creatures I had heard shuffling nearby grew strangely still. It was not the stillness of fear. It felt softer than that. Like the whole shore had grown tired at once.
+I should have been frightened, I think.
+Instead, I felt something I have no name for. Not happiness. Not sorrow. Only a kind of hush, as though for a moment the world had agreed to stop asking anything of me.
+When I finally stood, the feeling broke apart. The little sounds returned. The tide remembered itself. Whatever had settled over the night went with it.
+I have wondered since whether it came from me at all.
+But I think it did.
+There are parts of me that only seem to wake when no one is watching.</p>
     `
   },
 
   // ── ENTRY 9 ────────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 45 — The Moon Garden",
+    date: "Day 7 — I can be like them",
     body: `
-      <p>I found it by accident. A path I hadn't taken before,
-      overgrown with sea grass, leading down to a sheltered cove
-      on the far side of the island.</p>
-
-      <p>And there, in the shallow water, glowing beneath the
-      surface — life. New life. Tiny luminous shapes, pulsing
-      gently. The eggs had not been destroyed. The current had
-      carried them here, to this hidden place, this sheltered
-      garden the storm could not reach.</p>
-
-      <p class="emphasis-line">They survived. They survived.</p>
-
-      <p>I sat on the rocks and cried. I am not ashamed to write
-      that. Some things are too beautiful for composure.</p>
+      <p>I watched them again today.
+Not from very close. I do not think I am brave enough for that yet. But from the bushes near the path, I can see quite a lot.
+There is a way the others move when they are certain they belong. I do not know how to describe it properly. Nothing about it seems forced. They laugh when something is funny. 
+They tilt their heads at the right moments. They step forward when spoken to, and back when they should. 
+Even their silence seems natural, as though they have always known what shape to make of themselves in the company of others.
+I wanted to understand that.
+So I began watching more carefully.
+The way one of them lifted a hand before speaking. The little change in another’s voice when they were trying to sound brave. The pause before laughter. 
+The way one creature stamped the ground when it wanted to appear bigger than it felt. I told myself I was only curious.
+But when I was alone later, I found myself doing all of it.
+The same tilt of the head. The same small sound. The same careful little pause before a movement that was not really mine.
+It frightened me at first, how easily it happened.
+</p>
     `
   },
 
   // ── ENTRY 10 ───────────────────────────────────────────────
   {
     type: "entry",
-    date: "Day 52 — The Last Morning",
+    date: "",
     body: `
-      <p>The ferry returns tomorrow. My posting is over. My
-      reports are filed — careful, clinical, incomplete. I left
-      out everything that mattered.</p>
+      <p>Not because it hurt, but because it almost worked.
+For a few moments, I could imagine that if someone had seen me then, only for a few moments, only from a distance, they might have mistaken me for something ordinary. Something social. 
+Something that had grown up in the right place, among the right voices, learning the right way to exist. But the feeling never lasts.
+The borrowed gestures always begin to slip. The copied sounds seem strange, and then I am only myself again, or whatever “myself” is meant to mean.
+<br/>
+<br/>
+<p>
+I do not know whether I copy others because I admire them, or because I am trying to build a shape from all the pieces I seem to be missing.
+Maybe both.
+I only know that sometimes, after watching others long enough, I can almost believe I could become easier to love if I learned the pattern well enough.
+That is the part I am most ashamed to write.
+Not that I imitate them.
+But that, deep down, I still hope it might work.</p>
+    `
+  },
 
-      <p>Tonight I will go to the cove one last time. I will sit
-      among the lights beneath the water and listen for the
-      singing. If it comes, I will try to remember every note.</p>
+   // ── ENTRY 11 ───────────────────────────────────────────────
+  {
+    type: "entry",
+    date: "Day 8 - Stargazing",
+    body: `
+      <p>I counted stars tonight.
+Not because I thought they would answer me, but because numbers are easier to hold than feelings. Feelings spread too far. Numbers stay where they are placed.
+There were six points of light bright enough to keep my eyes on. 
+I told myself that if I watched them long enough, perhaps I would understand something about what was placed inside me, and what was left unfinished.
+Five of them burned steadily.
+One did not.
+It was not gone. Only quieter than the others. Dim in a way that felt familiar, as though whatever should have lived there had never fully woken. 
+I do not know why that thought comforted me, but it did. There is relief in believing that some things were never stolen from us. Only never lit to begin with.
+The other five seemed almost too clear by comparison. Too sharp. Too complete. It made the dim one feel less like a flaw, and more like a truth.
+I think that is what frightens others sometimes. Not that something is broken in me, but that so much of me feels almost too exact, while one part remains strangely absent.
+</p>
+    `
+  },
 
-      <p>If it doesn't, I will listen to the silence, and know
-      that it means the same thing.</p>
+   // ── ENTRY 12 ───────────────────────────────────────────────
+  {
+    type: "entry",
+    date: "",
+    body: `
+      <p>If I am honest, I do not think I was ever meant for hurting.
+Maybe that is the quiet star.
+Maybe that is why the others shine so hard around it. </p>
+    `
+  },
 
-      <p class="faded-ink">Some questions don't need answers.
-      Some mysteries are gentler left whole.</p>
+   // ── ENTRY 13 ───────────────────────────────────────────────
+  {
+    type: "entry",
+    date: "Day 9 - New beginnings",
+    body: `
+      <p>I am running out of pages to write.
+This journal helped more than I thought it would. It did not fix me, and it did not answer every question I have. But it gave me a place to put the thoughts that were too heavy to carry by myself.
+That made a difference.
+I still do not know exactly what I am, or why my life began the way it did. Some days that still hurts.
+But I have learned that not understanding everything does not mean there is no way forward.
+The sea keeps moving.
+The nights pass.
+The world keeps going, even when it is quiet.
+So will I.
+<br/>
+And maybe, someday, I will see that strange flash of black and white again. Maybe it will not feel cold next time. Maybe it will lead me somewhere I was always meant to be.
+If that day comes, I hope I will not be alone when it does.
+I hope there will be someone kind waiting for me.
+And perhaps, at last, a warm and gentle place to rest.
+Maybe that is enough to hope for.
+For now, it is enough for me to keep going...
+<br/>
+  <span class="signature-inline">Sincerely,&nbsp;<span class="name">Veluna</span></span>
+    </p>
     `
   },
 
@@ -295,25 +321,11 @@ const PAGES = [
     type: "final",
     body: `
       <p><br/></p>
-      <p>The remaining pages of this journal are blank.</p>
-
-      <p>The keeper's cottage was found empty. The dock was in
-      good repair. A single sketch — of a crescent moon reflected
-      in a tidepool — was pinned to the wall above the writing
-      desk, unsigned.</p>
-
-      <p>No further records of the author have been found.</p>
-
-      <p>The creatures described in these pages do not match any
-      catalogued species.</p>
-
-      <p><br/></p>
-      <p class="emphasis-line" style="text-align:center;">
-        But the cove still glows on moonlit nights.
-      </p>
-      <p style="text-align:center;" class="faded-ink">
-        — End of Fragments —
-      </p>
+      <p>The final page seems impossible to read..</p>
+      <p>It seems like someone has attempted to restore their identity?</p>
+      <div class="page-illustration page-illustration--bottom">
+        <img src="assets/Images/Veluna%20code%20fragments.png" alt="Veluna code fragments" draggable="false" />
+      </div>
     `,
     css: "final-page"
   }
@@ -428,7 +440,13 @@ const PAGES = [
 
   let currentIndex = 0;
   let isAnimating  = false;
-  const totalPages = PAGES.length;
+
+  // ── Compiled pages array ──
+  // PAGES entries that overflow a single page are automatically
+  // split into multiple pages at <p> boundaries. This array is
+  // built at init time by paginateEntries() below.
+  let compiledPages = [];
+  let totalPages = 0;
 
   // ── Build page HTML from data ──
   function renderPageHTML(pageData) {
@@ -469,9 +487,13 @@ const PAGES = [
 
   // ── Apply cover class if appropriate ──
   function applyPageType(pageEl, pageData) {
-    pageEl.classList.remove("page--cover");
+    // Clear page-level type classes and add when appropriate
+    pageEl.classList.remove("page--cover", "page--final");
     if (pageData && pageData.type === "cover") {
       pageEl.classList.add("page--cover");
+    }
+    if (pageData && pageData.type === "final") {
+      pageEl.classList.add("page--final");
     }
     // Extra CSS class
     if (pageData && pageData.css) {
@@ -486,7 +508,7 @@ const PAGES = [
 
   // ── Set a page element's content ──
   function setPageContent(pageEl, index) {
-    const data = PAGES[index];
+    const data = compiledPages[index];
     const content = pageEl.querySelector(".page__content");
     if (content && data) {
       content.innerHTML = renderPageHTML(data);
@@ -658,7 +680,135 @@ const PAGES = [
   // ── Hide flip page initially ──
   pageFlip.style.display = "none";
 
-  // ── Initialize ──
+  // ── Auto-pagination: split long entries across pages ──
+  // Creates a hidden measuring container that matches the real
+  // page dimensions, renders each entry into it, and splits
+  // at <p> / block-element boundaries if the content overflows.
+  function paginateEntries() {
+    // Create an off-screen measuring page
+    const measureEl = document.createElement("div");
+    measureEl.className = "page page--current";
+    measureEl.style.cssText =
+      "position:absolute; visibility:hidden; pointer-events:none; z-index:-1;";
+    measureEl.innerHTML =
+      '<div class="page__inner"><div class="page__content"><div class="entry-date" id="_measure_date"></div><div class="entry-body" id="_measure_body"></div></div></div>';
+    journal.appendChild(measureEl);
+
+    const contentEl  = measureEl.querySelector(".page__content");
+    const dateEl     = measureEl.querySelector("#_measure_date");
+    const bodyEl     = measureEl.querySelector("#_measure_body");
+
+    const result = [];
+
+    for (let i = 0; i < PAGES.length; i++) {
+      const page = PAGES[i];
+
+      // Cover and final pages are never split
+      if (page.type === "cover" || page.type === "final") {
+        result.push(page);
+        continue;
+      }
+
+      // Render the full entry to measure it
+      dateEl.textContent = "";
+      bodyEl.innerHTML = "";
+
+      if (page.date)  dateEl.textContent = page.date;
+      else            dateEl.style.display = "none";
+
+      if (page.body)  bodyEl.innerHTML = page.body;
+
+      // Check if it fits
+      const containerH = contentEl.clientHeight;
+      const contentH   = contentEl.scrollHeight;
+
+      dateEl.style.display = ""; // reset
+
+      if (contentH <= containerH + 2) {
+        // Fits on one page — keep as-is
+        result.push(page);
+        continue;
+      }
+
+      // ── Content overflows: split at block-element boundaries ──
+      // Collect all child elements of the body
+      const bodyChildren = Array.from(bodyEl.children);
+      if (bodyChildren.length <= 1) {
+        // Single block element — can't split further, keep as-is
+        result.push(page);
+        continue;
+      }
+
+      // Build chunks of children that fit within a page
+      let chunks = [];
+      let currentChunkHTML = "";
+      let isFirstChunk = true;
+
+      for (let c = 0; c < bodyChildren.length; c++) {
+        const childHTML = bodyChildren[c].outerHTML;
+        const testHTML  = currentChunkHTML + childHTML;
+
+        // Measure with this child added
+        bodyEl.innerHTML = testHTML;
+        if (isFirstChunk && page.date) {
+          dateEl.textContent = page.date;
+          dateEl.style.display = "";
+        } else {
+          dateEl.style.display = "none";
+        }
+
+        const testH = contentEl.scrollHeight;
+
+        if (testH > containerH + 2 && currentChunkHTML !== "") {
+          // This child pushes it over — save current chunk, start new
+          chunks.push({ html: currentChunkHTML, isFirst: isFirstChunk });
+          currentChunkHTML = childHTML;
+          isFirstChunk = false;
+        } else {
+          currentChunkHTML = testHTML;
+        }
+      }
+      // Push the last chunk
+      if (currentChunkHTML) {
+        chunks.push({ html: currentChunkHTML, isFirst: isFirstChunk });
+      }
+
+      // Convert chunks into page objects
+      for (let k = 0; k < chunks.length; k++) {
+        const chunk = chunks[k];
+        const newPage = {
+          type: page.type,
+          body: chunk.html,
+          css:  page.css || "",
+        };
+        // Only the first chunk gets the date/title
+        if (chunk.isFirst) {
+          if (page.date)  newPage.date  = page.date;
+          if (page.title) newPage.title = page.title;
+        }
+        // Only the last chunk gets the illustration
+        if (k === chunks.length - 1 && page.illustration) {
+          newPage.illustration        = page.illustration;
+          newPage.illustrationAlt     = page.illustrationAlt;
+          newPage.illustrationCaption = page.illustrationCaption;
+          newPage.illustrationPos     = page.illustrationPos;
+        }
+        result.push(newPage);
+      }
+
+      // Reset measure elements
+      dateEl.style.display = "";
+    }
+
+    // Clean up
+    journal.removeChild(measureEl);
+
+    compiledPages = result;
+    totalPages = compiledPages.length;
+  }
+
+  // ── Run pagination then initialize ──
+  paginateEntries();
   showPage(0);
 
 })();
