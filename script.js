@@ -87,7 +87,10 @@ On one of the broken pieces, there was a number carved so neatly that it could n
 <br/>
 <br/>
 <p>
-I still keep that piece with me. Sometimes I wonder if that was all I was ever meant to be. Not held. Not named. Only counted. I am hoping the number means more than I can read from it alone. Maybe if I learn more about who I am, it will begin to make sense somehow.
+I still keep that piece with me. Sometimes I wonder if that was all I was ever meant to be. Not held. Not named. Only counted. 
+I am hoping the number means more than I can read from it alone. 
+It looks like it was written in such hurry that it almost resembles letters. There are more numbers, but they have faded out..
+Maybe if I learn more about who I am, it will begin to make sense somehow.
 </p>
 
       
@@ -114,7 +117,8 @@ It is a comforting thought.</p>
     type: "entry",
     date: "Day 3 — The Moon and a name",
     body: `
-      <p>At night I like to hide beneath the bridge. Sometimes I sit in the bushes nearby and watch young trainers testing their strength against the girl who stands there. She speaks to her companions so gently. She looks at them as though they belong beside her. I try not to stare, but I always do.
+      <p>At night I like to hide beneath the bridge. Sometimes I sit in the bushes nearby and watch young trainers testing their strength against that girl they keep talking about. 
+      She speaks to her companions so gently. She looks at them as though they belong beside her. I try not to stare, but I always do.
 I wonder what it feels like to be looked at that way.
 I wonder what my own name would have been, if someone had stayed long enough to give me one.
 <br/>
