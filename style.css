@@ -37,6 +37,14 @@
 
   /* Animation */
   --flip-duration: 0.6s;
+  /* Final-page illustration controls (easy to tweak) */
+  --final-illustration-max-width: 86%;
+  --final-illustration-max-height: 320px;
+  --final-illustration-bottom: 24px;
+  --final-illustration-left: 50%;
+  --final-illustration-translateX: -50%;
+  --final-illustration-opacity: 1;
+  --final-illustration-z: 8;
 }
 
 /* ---------- Reset & Base ---------- */
@@ -537,43 +545,46 @@ body {
   overflow: hidden;
 }
 .final-page .page-illustration {
-  position: relative;
-  display: block;
-  margin-top: 12px; /* tweak to move image down/up inside the page */
-  margin-bottom: 8px;
+  /* Position the illustration absolutely inside the page so it doesn't
+     affect the document flow (won't push text down). Adjust the
+     variables in :root to change these values. */
+  position: absolute;
+  left: var(--final-illustration-left);
+  bottom: var(--final-illustration-bottom);
+  transform: translateX(var(--final-illustration-translateX));
+  pointer-events: none; /* allow clicking/selecting text beneath */
+  z-index: var(--final-illustration-z);
+  width: 100%;
+  text-align: center;
 }
 .final-page .page-illustration img {
-  display: block;
-  margin: 0 auto;
-  max-width: 86%;      /* Try increasing/decreasing this */
-  max-height: 320px;   /* Change this to make the image taller/shorter */
+  display: inline-block;
+  vertical-align: bottom;
+  max-width: var(--final-illustration-max-width);
+  max-height: var(--final-illustration-max-height);
   width: auto;
   height: auto;
   object-fit: contain;
-  opacity: 1;
+  opacity: var(--final-illustration-opacity);
   filter: none;
   mask-image: none;
   -webkit-mask-image: none;
   border-radius: 4px;
   box-shadow: none;
-  transition: transform 0.2s ease, opacity 0.2s;
-  transform-origin: center top;
-  transform: none; /* no large scale; keep it inside the page */
-  position: relative;
-  z-index: 2; /* ensure it sits above the page background */
-
+  transition: transform 0.18s ease, opacity 0.18s;
+  transform-origin: center bottom;
 }
 
 @media (max-width: 750px) {
   .final-page .page-illustration img {
-    max-height: 220px;
+    max-height: calc(var(--final-illustration-max-height) * 0.7);
     max-width: 92%;
   }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 480px) {
   .final-page .page-illustration img {
-    max-height: 140px;
+    max-height: calc(var(--final-illustration-max-height) * 0.45);
     max-width: 94%;
   }
 }

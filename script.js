@@ -323,11 +323,12 @@ For now, it is enough for me to keep going...
       <p><br/></p>
       <p>The final page seems impossible to read..</p>
       <p>It seems like someone has attempted to restore their identity?</p>
-      <p>Species name: ?</p>
-      <p>Ability: ?</p>
-      <p>Origin game: ?</p>
-      <p>OT Name: ?</p>
+      <p>Species name: ?</p> <p>Origin game: ?</p>
+      <p>Ability: ?</p> <p>OT Name: ?</p> <p>Nature: ?</p>
+      <p>Level: ?</p>
       <p>Language: ?</p>
+      <p>TID: ?</p>
+      <p>SID: ?</p>
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna%20code%20fragments.png" alt="Veluna code fragments" draggable="false" />
       </div>
