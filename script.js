@@ -274,6 +274,7 @@ I do not know why that thought comforted me, but it did. There is relief in beli
 The other five seemed almost too clear by comparison. Too sharp. Too complete. It made the dim one feel less like a flaw, and more like a truth.
 I think that is what frightens others sometimes. Not that something is broken in me, but that so much of me feels almost too exact, while one part remains strangely absent.
 </p>
+
     `
   },
 
@@ -285,6 +286,10 @@ I think that is what frightens others sometimes. Not that something is broken in
       <p>If I am honest, I do not think I was ever meant for hurting.
 Maybe that is the quiet star.
 Maybe that is why the others shine so hard around it. </p>
+
+      <div class="page-illustration page-illustration--bottom">
+        <img src="assets/Images/Veluna stars.png" alt="Veluna stars" draggable="false" />
+      </div>
     `
   },
 
@@ -364,6 +369,7 @@ For now, it is enough for me to keep going...
     pageTurn:  0.45,   // page-flip paper rustle sound effect
     river:     0.25,   // ambient river / water loop
     music:     0.18,   // "Silent Echoes of the Depths" background music
+    fragment:  0.65,   // click-to-play fragment sound
   };
 
   // Fade-in durations (milliseconds)
@@ -453,55 +459,11 @@ For now, it is enough for me to keep going...
   let compiledPages = [];
   let totalPages = 0;
 
-  // -----------------------------
-  // Secret page mechanics
-  // -----------------------------
-  let secretUnlocked = false;
-  const SECRET_PAGE = {
-    type: "entry",
-    css: "secret",
-    body: `
-      <p class="emphasis-line">A hidden fragment reads:</p>
-      <p class="margin-note">Glints of moonlight, a half-hidden name. Find the halves.</p>
-      <p class="emphasis-line">Species: <strong>— reveal by playing the tone —</strong></p>
-    `
-  };
-
-  // Play a short tone using WebAudio (runs on a user gesture)
-  function playSecretTone() {
-    try {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AC();
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.type = 'sine';
-      o.frequency.value = 880; // higher pitch for a "reveal"
-      o.connect(g);
-      g.connect(ctx.destination);
-      g.gain.setValueAtTime(0.0001, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.02);
-      o.start();
-      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
-      o.stop(ctx.currentTime + 0.65);
-    } catch (e) {
-      // ignore audio errors
-    }
-  }
-
-  function unlockSecretPage() {
-    if (secretUnlocked) return;
-    secretUnlocked = true;
-    const insertionIndex = Math.min(currentIndex + 1, compiledPages.length);
-    compiledPages.splice(insertionIndex, 0, SECRET_PAGE);
-    totalPages = compiledPages.length;
-    updateNav();
-    // brief toast/hint
-    hint.textContent = 'A fragment shifts, revealing something hidden.';
-    hint.classList.remove('hidden');
-    setTimeout(() => hint.classList.add('hidden'), 3200);
-    // navigate to the newly added secret page
-    goNext();
-  }
+  // Overlay fragment sound (played when overlay moon is clicked)
+  const SND_FRAGMENT = "sounds/Fragments of Veluna.mp3";
+  const audioFragment = new Audio(SND_FRAGMENT);
+  audioFragment.preload = 'auto';
+  audioFragment.volume = VOLUME.fragment;
 
   // ── Build page HTML from data ──
   function renderPageHTML(pageData) {
@@ -572,17 +534,20 @@ For now, it is enough for me to keep going...
     }
     applyPageType(pageEl, data);
 
-    // Attach overlay illustration click hook (plays tone and unlocks secret)
+    // Attach overlay illustration click hook (plays the provided fragment MP3)
     try {
       const overlayImgs = pageEl.querySelectorAll('.page-illustration--overlay img');
       overlayImgs.forEach(img => {
         img.style.cursor = 'pointer';
         img.addEventListener('click', (e) => {
-          // start ambient audio if necessary (unlock audio policy)
+          // start ambient audio if necessary (satisfy autoplay policies)
           startAmbientAudio();
-          playSecretTone();
-          unlockSecretPage();
-        }, { once: true });
+          // play the provided fragment MP3
+          try {
+            audioFragment.currentTime = 0;
+            audioFragment.play().catch(() => {});
+          } catch (err) { /* ignore playback errors */ }
+        });
       });
     } catch (e) { /* ignore */ }
   }
