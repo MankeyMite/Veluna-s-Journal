@@ -613,6 +613,117 @@ body {
   cursor: pointer;
 }
 
+/* Clickable inline reveal trigger (e.g. the word "strength") */
+.reveal-trigger {
+  /* Keep the trigger visually identical to surrounding text so it remains secret */
+  text-decoration: none;
+  color: inherit;
+  font-weight: inherit;
+  padding: 0;
+  border: none;
+  cursor: inherit;
+}
+.reveal-trigger:focus-visible {
+  /* Maintain keyboard focus outline for accessibility only when focused via keyboard */
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Screen-reader-only utility */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Braille clue styling — subtle, small, spaced to read the braille dots */
+.braille-clue {
+  margin-top: 8px;
+  font-family: monospace;
+  font-size: 1.05rem;
+  color: rgba(58,47,36,0.7);
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+}
+.braille-clue .braille-text {
+  display: inline-block;
+  font-size: 1.12rem;
+  letter-spacing: 0.22em;
+}
+
+/* City view overlay that fades in over the page temporarily */
+.city-overlay {
+  position: absolute;
+  inset: 6% 6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 75;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: scale(0.98);
+  background: transparent;
+  overflow: visible;
+}
+.city-overlay img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  box-shadow: none;
+  border-radius: 0;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  pointer-events: auto; /* allow clicking the picture to dismiss */
+}
+.city-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* Small fading notification used when an item becomes visible (e.g. glow discovery) */
+.reveal-notice {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%) scale(0.98);
+  z-index: 80;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  background: rgba(26,22,17,0.9);
+  color: var(--color-page);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+}
+.reveal-notice.visible {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.city-overlay.visible img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* When overlay is active, blur and slightly dim the page content behind it */
+.page-wrapper.overlay-blur {
+  filter: blur(6px) brightness(0.92);
+  transition: filter 0.9s ease;
+}
+
 /* Secret page styling */
 .page__content.secret {
   text-align: center;

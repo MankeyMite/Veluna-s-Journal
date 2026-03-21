@@ -59,7 +59,7 @@ const PAGES = [
       <p class="margin-note">
         The following pages were discovered inside a water-stained
         leather journal, bound inside a scarf.
-        The name Veluna was carved into the leather.
+        Luckily the pages are still readable.
       </p>
       <br/>
       <p class="faded-ink">
@@ -83,44 +83,75 @@ Maybe it will help me understand who I am.
 I do not think eggs are supposed to sound the way mine did.
 Before I opened my eyes, I think something was already wrong. I remember the shell trembling at strange times, as though it feared what it carried. When I finally woke, the world had already been moving without me for some time. The shell around me had gone cold.
 On one of the broken pieces, there was a number carved so neatly that it could not have belonged to chance:
-<p class="emphasis-line">38114.</p>
+<p class="emphasis-line">38114</p>
 <br/>
 <p>
 I still keep that piece with me. Sometimes I wonder if that was all I was ever meant to be. Not held. Not named. Only counted. 
 I am hoping the number means more than I can read from it alone. 
-It looks like it was written in such hurry that it almost resembles letters. There are more numbers, but they have faded out..
+It looks like it was written in such hurry that it almost resembles letters. There's more, but I can't quite see it in this <span class="reveal-trigger" data-swap-to="assets/Images/egg secret.png" data-notice-text="Something became visible in the glow.." tabindex="0" role="button" aria-haspopup="true" aria-controls="reveal-notice" aria-label="Reveal in glow">glow</span>..
 Maybe if I learn more about who I am, it will begin to make sense somehow.
 </p>
+
 
       
     `
   },
+
   // ── ENTRY 2 ────────────────────────────────────────────────
+  {
+    type: "entry",
+    date: "",
+    body: `
+      <p>The sea beside the city is so blue that when the sun begins to sink, it feels as though the whole world has been dipped in one quiet color. 
+      I like to sit there and watch the reflections. Sometimes, when I look too long, I notice something strange about my own.
+I do not look like the others.
+At first I thought it was only the light, or the water playing tricks on me. 
+But no matter where I go, or how carefully I wash, that strange green color remains. The others laugh and say I must have spent too much time hidden among the bushes. 
+I laugh with them sometimes, though I do not think that is the reason.
+There is something about me that does not feel as though I belong here.</p>
+      <p class="braille-clue" role="note" aria-hidden="false">
+        <span class="braille-text">⠛⠇⠕⠺</span>
+        <span class="sr-only">Braille: glow</span>
+      </p>
+    `
+  },
+  
+  // ── ENTRY 3 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 2 — The City and the Sea",
     body: `
-      <p>The others seem so natural. So certain. Their lives fit around them neatly, as though they were born already knowing what shape they were meant to take. I do not have that feeling. I feel as though I arrived from somewhere else. Somewhere colder, stranger. Sometimes, when I close my eyes, I almost remember waking to something black and white before I found myself here. I do not understand that memory, only that it frightens me.
-<br/>
+      <p>The others seem so natural. So certain. Their lives fit around them neatly, as though they were born already knowing what shape they were meant to take. 
+      I do not have that feeling. I feel as though I arrived from somewhere else. 
+      Somewhere colder, stranger. Sometimes, when I close my eyes, I almost remember waking to something black and white before I found myself here. 
+      I do not understand that memory, only that it frightens me.
 <br/>
 <p>
 There was a scarf lying beside the shell when I woke.
 
-I have wrapped it around myself ever since. I do not know who it belonged to, but I have decided it must matter. I have chosen to believe it was not left behind by accident. Perhaps it belongs to the one who brought me here. Perhaps they will return for it one day, and when they do, I will tell them everything. I will show them how carefully I kept it folded, how I tried to stay clean, how I waited.
+I have wrapped it around myself ever since. I do not know who it belonged to, but I have decided it must matter. I have chosen to believe it was not left behind by accident. 
+Perhaps it belongs to the one who brought me here. Perhaps they will return for it one day, and when they do, I will tell them everything. 
+I will show them how carefully I kept it folded, how I tried to stay clean, how I waited. Rather a name than "Not Applicable".
 It is a comforting thought.</p>
     `
   },
 
-  // ── ENTRY 3 ────────────────────────────────────────────────
+  // ── ENTRY 4 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 3 — The Moon and a name",
     body: `
-      <p>At night I like to hide beneath the bridge. Sometimes I sit in the bushes nearby and watch young trainers testing their strength against that girl they keep talking about. 
+      <p>At night I like to hide beneath the bridge. Sometimes I sit in the bushes nearby and watch young trainers testing their <span class="reveal-trigger" data-overlay-src="assets/Images/City.png" tabindex="0" role="button" aria-haspopup="true" aria-controls="city-overlay" aria-label="Reveal city view">strength</span> against that girl they keep talking about. 
       She speaks to her companions so gently. She looks at them as though they belong beside her. I try not to stare, but I always do.
 I wonder what it feels like to be looked at that way.
 I wonder what my own name would have been, if someone had stayed long enough to give me one.
 <br/>
+      
+      <p class="braille-clue" role="note" aria-hidden="false">
+        <span class="braille-text">⠎⠞⠗⠑⠝⠛⠞⠓</span>
+        <span class="sr-only">Braille: strength</span>
+      </p>
+
 <p>
 The moon was beautiful tonight. I watched it spread silver across the sea, and for the first time, I felt that perhaps a name does not always have to be given. Perhaps sometimes it can be chosen.
 So I have chosen one for myself.
@@ -136,7 +167,7 @@ From now on, my name is <p class="emphasis-line">Veluna.</p>
     css: "overlay"
   },
 
-  // ── ENTRY 4 ────────────────────────────────────────────────
+  // ── ENTRY 5 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 4 — A fulfilling silence",
@@ -153,7 +184,7 @@ For a little while, neither of us was afraid.</p>
     `
   },
 
-  // ── ENTRY 5 ────────────────────────────────────────────────
+  // ── ENTRY 6 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 5 — A hidden protector",
@@ -174,7 +205,7 @@ I wish I knew what happened in that missing space. I wish I could say it was not
     `
   },
 
-  // ── ENTRY 6 ────────────────────────────────────────────────
+  // ── ENTRY 7 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "",
@@ -193,7 +224,7 @@ And more frightened still that, when it was over, part of me felt relieved. </p>
     `
   },
 
-  // ── ENTRY 7 ────────────────────────────────────────────────
+  // ── ENTRY 8 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 6 — The Sound from within",
@@ -208,7 +239,7 @@ After that, everything seemed to change a little.</p>
     `
   },
 
-  // ── ENTRY 8 ────────────────────────────────────────────────
+  // ── ENTRY 9 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "",
@@ -223,7 +254,7 @@ There are parts of me that only seem to wake when no one is watching.</p>
     `
   },
 
-  // ── ENTRY 9 ────────────────────────────────────────────────
+  // ── ENTRY 10 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 7 — I can be like them",
@@ -244,7 +275,7 @@ It frightened me at first, how easily it happened.
     `
   },
 
-  // ── ENTRY 10 ───────────────────────────────────────────────
+  // ── ENTRY 11 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "",
@@ -265,7 +296,7 @@ But that, deep down, I still hope it might work.</p>
     `
   },
 
-   // ── ENTRY 11 ───────────────────────────────────────────────
+   // ── ENTRY 12 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 8 - Stargazing",
@@ -285,7 +316,7 @@ I think that is what frightens others sometimes. Not that something is broken in
     `
   },
 
-   // ── ENTRY 12 ───────────────────────────────────────────────
+   // ── ENTRY 13 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "",
@@ -300,7 +331,7 @@ Maybe that is why the others shine so hard around it. </p>
     `
   },
 
-   // ── ENTRY 13 ───────────────────────────────────────────────
+   // ── ENTRY 14 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 9 - New beginnings",
@@ -334,12 +365,11 @@ For now, it is enough for me to keep going...
       <p><br/></p>
       <p>The final page seems impossible to read..</p>
       <p>It seems like someone has attempted to restore their identity?</p>
-      <p>Species name: ?</p> <p>Origin game: ?</p>
-      <p>Ability: ?</p> <p>OT Name: ?</p> <p>Nature: ?</p>
-      <p>Level: ?</p>
-      <p>Language: ?</p>
-      <p>TID: ?</p>
-      <p>SID: ?</p>
+      <p>Species name: ?     Origin game: ?</p>
+      <p>Ability: ?    OT Name: ? 
+      <p>Nature: ?    Level: ?</p>
+      <p>TID: ?     SID: ?  PID: ?</p>
+      <p>Move 1: ? Move 2: ? Move 3: ? Move 4: ?</p>
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna%20code%20fragments.png" alt="Veluna code fragments" draggable="false" />
       </div>
@@ -525,6 +555,145 @@ For now, it is enough for me to keep going...
   audioFragment.preload = 'auto';
   audioFragment.volume = VOLUME.fragment;
 
+  // City view overlay (clickable word reveal — shows a temporary image over the page)
+  const CITY_OVERLAY_ID = 'city-overlay';
+  let cityOverlayTimeout = null;
+
+  function ensureCityOverlay() {
+    let el = document.getElementById(CITY_OVERLAY_ID);
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = CITY_OVERLAY_ID;
+    el.className = 'city-overlay';
+    el.setAttribute('aria-hidden', 'true');
+    const img = document.createElement('img');
+    img.id = 'city-overlay-img';
+    img.alt = 'City view';
+    img.draggable = false;
+    el.appendChild(img);
+    journal.appendChild(el);
+    // allow clicking overlay to dismiss early
+    el.addEventListener('click', () => hideCityOverlay());
+    return el;
+  }
+
+  function showCityOverlay(src, duration = 3000, playSound = true) {
+    startAmbientAudio();
+    const el = ensureCityOverlay();
+    const img = el.querySelector('img');
+    if (src) img.src = src;
+    // Blur the page content behind the overlay (page-wrapper only)
+    try {
+      const wrapper = journal.querySelector('.page-wrapper');
+      if (wrapper) wrapper.classList.add('overlay-blur');
+    } catch (e) { /* ignore */ }
+
+    el.setAttribute('aria-hidden', 'false');
+    // Force a layout then show so the fade/scale transition runs reliably
+    void el.offsetHeight;
+    el.classList.add('visible');
+    // optionally play the fragment clip
+    try { if (playSound) { audioFragment.currentTime = 0; audioFragment.play().catch(()=>{}); } } catch (e) {}
+    if (cityOverlayTimeout) clearTimeout(cityOverlayTimeout);
+    cityOverlayTimeout = setTimeout(() => hideCityOverlay(), duration);
+  }
+
+  function hideCityOverlay() {
+    const el = document.getElementById(CITY_OVERLAY_ID);
+    if (!el) return;
+    // Start fade-out
+    el.classList.remove('visible');
+    el.setAttribute('aria-hidden', 'true');
+    const img = el.querySelector('img');
+    // Remove the blur after the overlay fade completes
+    const fadeMs = 920; // matches CSS transition (~0.9s)
+    setTimeout(() => {
+      try {
+        const wrapper = journal.querySelector('.page-wrapper');
+        if (wrapper) wrapper.classList.remove('overlay-blur');
+      } catch (e) { /* ignore */ }
+      if (img) img.src = '';
+    }, fadeMs);
+    if (cityOverlayTimeout) { clearTimeout(cityOverlayTimeout); cityOverlayTimeout = null; }
+  }
+
+  // Reveal notice and egg-swap helpers
+  const REVEAL_NOTICE_ID = 'reveal-notice';
+  let revealNoticeTimeout = null;
+
+  function ensureRevealNotice() {
+    let el = document.getElementById(REVEAL_NOTICE_ID);
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = REVEAL_NOTICE_ID;
+    el.className = 'reveal-notice';
+    el.setAttribute('aria-hidden', 'true');
+    journal.appendChild(el);
+    el.addEventListener('click', () => hideRevealNotice());
+    return el;
+  }
+
+  function showRevealNotice(text, duration = 3000) {
+    const el = ensureRevealNotice();
+    el.textContent = text;
+    // Force layout then animate
+    void el.offsetHeight;
+    el.setAttribute('aria-hidden', 'false');
+    el.classList.add('visible');
+    if (revealNoticeTimeout) clearTimeout(revealNoticeTimeout);
+    revealNoticeTimeout = setTimeout(() => hideRevealNotice(), duration);
+  }
+
+  function hideRevealNotice() {
+    const el = document.getElementById(REVEAL_NOTICE_ID);
+    if (!el) return;
+    el.classList.remove('visible');
+    el.setAttribute('aria-hidden', 'true');
+    const fadeMs = 920;
+    setTimeout(() => { try { if (el) el.textContent = ''; } catch (e) {} }, fadeMs);
+    if (revealNoticeTimeout) { clearTimeout(revealNoticeTimeout); revealNoticeTimeout = null; }
+  }
+
+  function swapEggImage(newSrc) {
+    try {
+      // Update any live <img> elements currently in the DOM
+      const imgs = document.querySelectorAll('img');
+      imgs.forEach(img => {
+        const srcAttr = img.getAttribute('src') || img.src || '';
+        if (!srcAttr) return;
+        let srcNorm = srcAttr;
+        try { srcNorm = decodeURIComponent(srcNorm); } catch (e) {}
+        if (srcNorm.match(/Hatched(?:%20|\s)egg\.png/i) || srcNorm.toLowerCase().includes('hatched egg')) {
+          img.src = newSrc;
+        }
+      });
+
+      // Update the source in the PAGES data so the change persists when navigating
+      try {
+        const needle = /assets\/Images\/Hatched(?:%20|\s)egg\.png/gi;
+        for (let i = 0; i < PAGES.length; i++) {
+          const page = PAGES[i];
+          if (page && page.body && typeof page.body === 'string' && needle.test(page.body)) {
+            page.body = page.body.replace(needle, newSrc);
+          }
+          // Also update explicit illustration fields if present
+          if (page && page.illustration && typeof page.illustration === 'string') {
+            if (page.illustration.match(/Hatched(?:%20|\s)egg\.png/i) || page.illustration.toLowerCase().includes('hatched egg')) {
+              page.illustration = newSrc;
+            }
+          }
+        }
+      } catch (e) { /* ignore PAGES update errors */ }
+
+      // Rebuild compiledPages and re-render current page so user sees the change when navigating
+      try {
+        paginateEntries();
+        showPage(currentIndex);
+      } catch (e) { /* ignore pagination errors */ }
+
+    } catch (e) { /* ignore */ }
+  }
+
   // ── Build page HTML from data ──
   function renderPageHTML(pageData) {
     if (!pageData) return "";
@@ -607,6 +776,35 @@ For now, it is enough for me to keep going...
             audioFragment.currentTime = 0;
             audioFragment.play().catch(() => {});
           } catch (err) { /* ignore playback errors */ }
+        });
+      });
+    } catch (e) { /* ignore */ }
+    
+    // Attach reveal-trigger handlers (clickable inline words that reveal a temporary overlay
+    // or perform a swap action). If a trigger includes `data-swap-to` it will swap images;
+    // otherwise it behaves like the city overlay (silent by default).
+    try {
+      const triggers = pageEl.querySelectorAll('.reveal-trigger');
+      triggers.forEach(tr => {
+        tr.addEventListener('click', (e) => {
+          e.preventDefault(); e.stopPropagation();
+          const swapTo = tr.dataset.swapTo || tr.getAttribute('data-swap-to');
+          if (swapTo) {
+            // perform a DOM image swap (e.g. replace the hatched egg with the secret egg)
+            swapEggImage(swapTo);
+            const notice = tr.dataset.noticeText || tr.getAttribute('data-notice-text') || 'Something became visible in the glow..';
+            showRevealNotice(notice, 3500);
+          } else {
+            // Default: show the city overlay (silent by default for inline reveals)
+            startAmbientAudio();
+            const src = tr.dataset.overlaySrc || tr.getAttribute('data-overlay-src') || 'assets/Images/City.png';
+            showCityOverlay(src, 3500, false);
+          }
+        });
+        tr.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+            e.preventDefault(); tr.click();
+          }
         });
       });
     } catch (e) { /* ignore */ }
