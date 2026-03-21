@@ -85,7 +85,6 @@ Before I opened my eyes, I think something was already wrong. I remember the she
 On one of the broken pieces, there was a number carved so neatly that it could not have belonged to chance:
 <p class="emphasis-line">38114.</p>
 <br/>
-<br/>
 <p>
 I still keep that piece with me. Sometimes I wonder if that was all I was ever meant to be. Not held. Not named. Only counted. 
 I am hoping the number means more than I can read from it alone. 
