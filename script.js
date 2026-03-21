@@ -197,7 +197,7 @@ Then I remember nothing. Only what came after.
 <br/>
 <p>
 The earth was torn where I stood. The air smelled sharp, as though something violent had split through it. The one who had come near me was lying several steps away, staring not with anger, but with the wide, hollow fear of someone who has seen something they do not understand.
-No one has come close in quite the same way since.
+No one has come close in quite the same way since. At least thirty seconds are gone from my memory.
 I wish I knew what happened in that missing space. I wish I could say it was not me. But somewhere inside myself, when I think too long about it, I feel the shape of an answer I do not want.
 </p>
 
@@ -251,6 +251,10 @@ When I finally stood, the feeling broke apart. The little sounds returned. The t
 I have wondered since whether it came from me at all.
 But I think it did.
 There are parts of me that only seem to wake when no one is watching.</p>
+      <p class="morse-clue" role="note" aria-hidden="false">
+        <span class="morse-text">-... ..- - - --- -. ...</span>
+        <span class="sr-only">Morse: buttons</span>
+      </p>
     `
   },
 
@@ -260,7 +264,7 @@ There are parts of me that only seem to wake when no one is watching.</p>
     date: "Day 7 — I can be like them",
     body: `
       <p>I watched them again today.
-Not from very close. I do not think I am brave enough for that yet. But from the bushes near the path, I can see quite a lot.
+Not from very close. I do not think I am brave enough for that yet. But from the bushes, through the leaves, I can see quite a lot.
 There is a way the others move when they are certain they belong. I do not know how to describe it properly. Nothing about it seems forced. They laugh when something is funny. 
 They tilt their heads at the right moments. They step forward when spoken to, and back when they should. 
 Even their silence seems natural, as though they have always known what shape to make of themselves in the company of others.
@@ -270,7 +274,7 @@ The way one of them lifted a hand before speaking. The little change in another�
 The way one creature stamped the ground when it wanted to appear bigger than it felt. I told myself I was only curious.
 But when I was alone later, I found myself doing all of it.
 The same tilt of the head. The same small sound. The same careful little pause before a movement that was not really mine.
-It frightened me at first, how easily it happened.
+
 </p>
     `
   },
@@ -280,19 +284,23 @@ It frightened me at first, how easily it happened.
     type: "entry",
     date: "",
     body: `
-      <p>Not because it hurt, but because it almost worked.
+    
+      <p>It frightened me at first, how easily it happened. Not because it hurt, but because it almost worked.
 For a few moments, I could imagine that if someone had seen me then, only for a few moments, only from a distance, they might have mistaken me for something ordinary. Something social. 
 Something that had grown up in the right place, among the right voices, learning the right way to exist. But the feeling never lasts.
 The borrowed gestures always begin to slip. The copied sounds seem strange, and then I am only myself again, or whatever “myself” is meant to mean.
 <br/>
-<br/>
 <p>
-I do not know whether I copy others because I admire them, or because I am trying to build a shape from all the pieces I seem to be missing.
+I do not know whether I imitate others because I admire them, or because I am trying to build a shape from all the pieces I seem to be missing.
 Maybe both.
 I only know that sometimes, after watching others long enough, I can almost believe I could become easier to love if I learned the pattern well enough.
 That is the part I am most ashamed to write.
 Not that I imitate them.
 But that, deep down, I still hope it might work.</p>
+<p class="morse-clue" role="note" aria-hidden="false">
+        <span class="morse-text">-.-- --- .-. -.. ...</span>
+        <span class="sr-only">Morse: words</span>
+      </p>
     `
   },
 
@@ -323,7 +331,7 @@ I think that is what frightens others sometimes. Not that something is broken in
     body: `
       <p>If I am honest, I do not think I was ever meant for hurting.
 Maybe that is the quiet star.
-Maybe that is why the others shine so hard around it. </p>
+Maybe that is why the others shine so brigharound it. </p>
 
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna stars.png" alt="Veluna stars" draggable="false" />
@@ -360,16 +368,19 @@ For now, it is enough for me to keep going...
 
   // ── FINAL PAGE ─────────────────────────────────────────────
   {
-    type: "final",
+    type: "entry",
     body: `
       <p><br/></p>
       <p>The final page seems impossible to read..</p>
       <p>It seems like someone has attempted to restore their identity?</p>
-      <p>Species name: ?     Origin game: ?</p>
-      <p>Ability: ?    OT Name: ? 
-      <p>Nature: ?    Level: ?</p>
-      <p>TID: ?     SID: ?  PID: ?</p>
-      <p>Move 1: ? Move 2: ? Move 3: ? Move 4: ?</p>
+      <div class="older-text">
+        <p>Species name: ?</p>
+        <p>Nature: ?    Ability: ?</p>
+        <p>Level: ? OT Name: ?</p>
+        <p>TID: ?     SID: ?  PID: ?</p>
+        <p>Move 1: ? Move 2: ? Move 3: ? Move 4: ?</p>
+        <p>Origin game: ?     Met Location: ?</p>
+      </div>
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna%20code%20fragments.png" alt="Veluna code fragments" draggable="false" />
       </div>
@@ -694,6 +705,74 @@ For now, it is enough for me to keep going...
     } catch (e) { /* ignore */ }
   }
 
+  // Image zoom overlay (click illustration to enlarge)
+  const IMAGE_ZOOM_ID = 'image-zoom-overlay';
+  let imageZoomKeyHandler = null;
+
+  function ensureImageZoomOverlay() {
+    let el = document.getElementById(IMAGE_ZOOM_ID);
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = IMAGE_ZOOM_ID;
+    el.className = 'image-zoom-overlay';
+    el.setAttribute('aria-hidden', 'true');
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.tabIndex = -1;
+    const img = document.createElement('img');
+    img.id = 'image-zoom-img';
+    img.className = 'zoom-img';
+    img.alt = '';
+    img.draggable = false;
+    el.appendChild(img);
+    journal.appendChild(el);
+    // clicking anywhere hides the zoom view
+    el.addEventListener('click', () => hideImageZoom());
+    return el;
+  }
+
+  function showImageZoom(src, alt = '') {
+    const el = ensureImageZoomOverlay();
+    const img = el.querySelector('img');
+    if (src) img.src = src;
+    img.alt = alt || '';
+    try {
+      const wrapper = journal.querySelector('.page-wrapper');
+      if (wrapper) wrapper.classList.add('overlay-blur');
+    } catch (e) { /* ignore */ }
+
+    el.setAttribute('aria-hidden', 'false');
+    // Force layout then show
+    void el.offsetHeight;
+    el.classList.add('visible');
+    el.focus();
+
+    // ESC to close
+    imageZoomKeyHandler = function (ev) {
+      if (ev.key === 'Escape' || ev.key === 'Esc') {
+        hideImageZoom();
+      }
+    };
+    document.addEventListener('keydown', imageZoomKeyHandler);
+  }
+
+  function hideImageZoom() {
+    const el = document.getElementById(IMAGE_ZOOM_ID);
+    if (!el) return;
+    el.classList.remove('visible');
+    el.setAttribute('aria-hidden', 'true');
+    const img = el.querySelector('img');
+    const fadeMs = 300;
+    setTimeout(() => {
+      try {
+        const wrapper = journal.querySelector('.page-wrapper');
+        if (wrapper) wrapper.classList.remove('overlay-blur');
+      } catch (e) { /* ignore */ }
+      if (img) img.src = '';
+    }, fadeMs);
+    if (imageZoomKeyHandler) { document.removeEventListener('keydown', imageZoomKeyHandler); imageZoomKeyHandler = null; }
+  }
+
   // ── Build page HTML from data ──
   function renderPageHTML(pageData) {
     if (!pageData) return "";
@@ -776,6 +855,22 @@ For now, it is enough for me to keep going...
             audioFragment.currentTime = 0;
             audioFragment.play().catch(() => {});
           } catch (err) { /* ignore playback errors */ }
+        });
+      });
+    } catch (e) { /* ignore */ }
+    
+    // Attach zoom-to-fullscreen handlers for any page illustrations (click or keyboard)
+    try {
+      const illus = pageEl.querySelectorAll('.page-illustration img');
+      illus.forEach(img => {
+        img.style.cursor = 'zoom-in';
+        if (!img.hasAttribute('tabindex')) img.setAttribute('tabindex', '0');
+        const openZoom = (ev) => { if (ev) ev.stopPropagation(); showImageZoom(img.src, img.alt || ''); };
+        img.addEventListener('click', openZoom);
+        img.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+            e.preventDefault(); openZoom(e);
+          }
         });
       });
     } catch (e) { /* ignore */ }
