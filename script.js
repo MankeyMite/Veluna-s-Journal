@@ -92,9 +92,9 @@ I still keep that piece with me. Sometimes I wonder if that was all I was ever m
 
       
     `
-
+  },
   // ── ENTRY 2 ────────────────────────────────────────────────
-  ,
+  {
     type: "entry",
     date: "Day 2 — The City and the Sea",
     body: `
