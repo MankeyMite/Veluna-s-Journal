@@ -183,6 +183,10 @@ Something older than choice.
 Something that does not protect me gently.
 I am frightened of how completely my body can answer without asking me first.
 And more frightened still that, when it was over, part of me felt relieved. </p>
+
+<div class="page-illustration page-illustration--bottom">
+        <img src="assets/Images/Torn Earth.png" alt="Torn Earth" draggable="false" />
+      </div>
     `
   },
 
@@ -386,9 +390,26 @@ For now, it is enough for me to keep going...
   const audioPageTurn = new Audio(SND_PAGE_TURN);
   audioPageTurn.volume = VOLUME.pageTurn;
 
-  const audioRiver = new Audio(SND_RIVER);
-  audioRiver.loop = true;
-  audioRiver.volume = 0; // starts silent, fades in
+  // Use WebAudio for a gapless river loop
+  let webAudioCtx = null;
+  let riverBuffer = null;
+  let riverSource = null;
+  let riverGain = null;
+
+  async function loadRiverBuffer() {
+    try {
+      const resp = await fetch(SND_RIVER);
+      const arrayBuffer = await resp.arrayBuffer();
+      const AC = window.AudioContext || window.webkitAudioContext;
+      webAudioCtx = webAudioCtx || new AC();
+      riverBuffer = await webAudioCtx.decodeAudioData(arrayBuffer);
+    } catch (e) {
+      console.warn('Failed to load river audio buffer:', e);
+    }
+  }
+
+  // Preload but don't start playback until user gesture
+  loadRiverBuffer();
 
   const audioMusic = new Audio(SND_MUSIC);
   audioMusic.loop = true;
@@ -427,7 +448,43 @@ For now, it is enough for me to keep going...
   function startAmbientAudio() {
     if (audioStarted) return;
     audioStarted = true;
-    fadeIn(audioRiver, VOLUME.river, FADE_IN_RIVER);
+    // Start the river loop via WebAudio for gapless playback
+    const startRiver = () => {
+      try {
+        if (!webAudioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          webAudioCtx = new AC();
+        }
+        if (riverSource) {
+          try { riverSource.stop(); } catch (e) {}
+        }
+        if (!riverBuffer) {
+          // If buffer isn't ready, try loading then start
+          loadRiverBuffer().then(() => startRiver());
+          return;
+        }
+        riverSource = webAudioCtx.createBufferSource();
+        riverSource.buffer = riverBuffer;
+        riverSource.loop = true;
+        riverGain = webAudioCtx.createGain();
+        riverGain.gain.value = 0.0001;
+        riverSource.connect(riverGain);
+        riverGain.connect(webAudioCtx.destination);
+        riverSource.start(0);
+
+        // Fade the gain up smoothly
+        try {
+          const now = webAudioCtx.currentTime;
+          riverGain.gain.cancelScheduledValues(now);
+          riverGain.gain.setValueAtTime(0.0001, now);
+          riverGain.gain.exponentialRampToValueAtTime(Math.max(VOLUME.river, 0.0001), now + FADE_IN_RIVER / 1000);
+        } catch (e) { /* ignore scheduling errors */ }
+      } catch (err) {
+        console.warn('River playback error', err);
+      }
+    };
+
+    startRiver();
     fadeIn(audioMusic, VOLUME.music, FADE_IN_MUSIC);
   }
 
@@ -844,5 +901,19 @@ For now, it is enough for me to keep going...
   // ── Run pagination then initialize ──
   paginateEntries();
   showPage(0);
+
+  // Debug helper: expose compiled pages summary and quick navigation
+  try {
+    window.velunaDebug = {
+      list: function () {
+        return compiledPages.map((p, i) => ({ index: i, type: p.type, date: p.date || null, title: p.title || null }));
+      },
+      open: function (i) {
+        if (typeof i === 'number' && i >= 0 && i < compiledPages.length) {
+          showPage(i);
+        }
+      }
+    };
+  } catch (e) { /* ignore */ }
 
 })();
