@@ -331,7 +331,7 @@ I think that is what frightens others sometimes. Not that something is broken in
     body: `
       <p>If I am honest, I do not think I was ever meant for hurting.
 Maybe that is the quiet star.
-Maybe that is why the others shine so brigharound it. </p>
+Maybe that is why the others shine so bright around it. </p>
 
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna stars.png" alt="Veluna stars" draggable="false" />
@@ -375,11 +375,11 @@ For now, it is enough for me to keep going...
       <p>It seems like someone has attempted to restore their identity?</p>
       <div class="older-text">
         <p>Species name: ?</p>
-        <p>Nature: ?    Ability: ?</p>
+        <p>Nature: ? Ability: ?</p>
         <p>Level: ? OT Name: ?</p>
-        <p>TID: ?     SID: ?  PID: ?</p>
+        <p>TID: ?  SID: ?  PID: ?</p>
         <p>Move 1: ? Move 2: ? Move 3: ? Move 4: ?</p>
-        <p>Origin game: ?     Met Location: ?</p>
+        <p>Origin game: ?  Met Location: ?</p>
       </div>
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna%20code%20fragments.png" alt="Veluna code fragments" draggable="false" />
@@ -437,23 +437,34 @@ For now, it is enough for me to keep going...
   // Use WebAudio for a gapless river loop
   let webAudioCtx = null;
   let riverBuffer = null;
+  let riverRawBuffer = null; // raw ArrayBuffer fetched at load time
   let riverSource = null;
   let riverGain = null;
 
-  async function loadRiverBuffer() {
+  // Pre-fetch the river file as a raw ArrayBuffer (no AudioContext needed)
+  async function prefetchRiverBuffer() {
     try {
       const resp = await fetch(SND_RIVER);
-      const arrayBuffer = await resp.arrayBuffer();
-      const AC = window.AudioContext || window.webkitAudioContext;
-      webAudioCtx = webAudioCtx || new AC();
-      riverBuffer = await webAudioCtx.decodeAudioData(arrayBuffer);
+      riverRawBuffer = await resp.arrayBuffer();
     } catch (e) {
-      console.warn('Failed to load river audio buffer:', e);
+      console.warn('Failed to prefetch river audio:', e);
     }
   }
+  prefetchRiverBuffer();
 
-  // Preload but don't start playback until user gesture
-  loadRiverBuffer();
+  // Decode the raw buffer into an AudioBuffer (requires an AudioContext)
+  async function decodeRiverBuffer() {
+    if (riverBuffer) return; // already decoded
+    if (!riverRawBuffer) return;
+    if (!webAudioCtx) return;
+    try {
+      // decodeAudioData consumes the buffer, so copy it first
+      const copy = riverRawBuffer.slice(0);
+      riverBuffer = await webAudioCtx.decodeAudioData(copy);
+    } catch (e) {
+      console.warn('Failed to decode river audio:', e);
+    }
+  }
 
   const audioMusic = new Audio(SND_MUSIC);
   audioMusic.loop = true;
@@ -461,7 +472,6 @@ For now, it is enough for me to keep going...
 
   // ── Play page-turn sound ──
   function playPageTurn() {
-    // Reset to start so rapid flips overlap cleanly
     audioPageTurn.currentTime = 0;
     audioPageTurn.play().catch(() => {});
   }
@@ -476,7 +486,6 @@ For now, it is enough for me to keep going...
 
     const interval = setInterval(() => {
       step++;
-      // Ease-in curve for natural feel
       const t = step / steps;
       audioEl.volume = targetVolume * (t * t);
       if (step >= steps) {
@@ -486,69 +495,106 @@ For now, it is enough for me to keep going...
     }, stepTime);
   }
 
-  // ── Start ambient audio on first user interaction ──
-  // Browsers block autoplay until user interacts with the page.
-  let audioStarted = false;
-  function startAmbientAudio() {
-    if (audioStarted) return;
-    audioStarted = true;
-    // Start the river loop via WebAudio for gapless playback
-    const startRiver = () => {
-      try {
-        if (!webAudioCtx) {
-          const AC = window.AudioContext || window.webkitAudioContext;
-          webAudioCtx = new AC();
-        }
-        if (riverSource) {
-          try { riverSource.stop(); } catch (e) {}
-        }
-        if (!riverBuffer) {
-          // If buffer isn't ready, try loading then start
-          loadRiverBuffer().then(() => startRiver());
-          return;
-        }
-        riverSource = webAudioCtx.createBufferSource();
-        riverSource.buffer = riverBuffer;
-        riverSource.loop = true;
-        riverGain = webAudioCtx.createGain();
-        riverGain.gain.value = 0.0001;
-        riverSource.connect(riverGain);
-        riverGain.connect(webAudioCtx.destination);
-        riverSource.start(0);
+  // ── Start ambient audio on user interaction ──
+  // Mobile browsers block autoplay until a user gesture (click/touchend).
+  // We retry on every gesture until both sources are confirmed playing,
+  // because the buffer may not be ready on the first tap.
+  let riverPlaying = false;
+  let musicPlaying = false;
 
-        // Fade the gain up smoothly
+  function startAmbientAudio() {
+    // ── Ensure AudioContext exists and is running ──
+    if (!webAudioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      webAudioCtx = new AC();
+    }
+    // Resume suspended context (required on iOS/mobile)
+    if (webAudioCtx.state === 'suspended') {
+      webAudioCtx.resume().catch(() => {});
+    }
+
+    // ── River (WebAudio BufferSource loop) ──
+    if (!riverPlaying) {
+      const tryRiver = () => {
+        if (riverPlaying) return;
+        if (!riverBuffer) return; // not decoded yet
         try {
+          if (riverSource) { try { riverSource.stop(); } catch (e) {} }
+          riverSource = webAudioCtx.createBufferSource();
+          riverSource.buffer = riverBuffer;
+          riverSource.loop = true;
+          riverGain = webAudioCtx.createGain();
+          riverGain.gain.value = 0.0001;
+          riverSource.connect(riverGain);
+          riverGain.connect(webAudioCtx.destination);
+          riverSource.start(0);
+          riverPlaying = true;
+
+          // Fade gain up
           const now = webAudioCtx.currentTime;
           riverGain.gain.cancelScheduledValues(now);
           riverGain.gain.setValueAtTime(0.0001, now);
-          riverGain.gain.exponentialRampToValueAtTime(Math.max(VOLUME.river, 0.0001), now + FADE_IN_RIVER / 1000);
-        } catch (e) { /* ignore scheduling errors */ }
-      } catch (err) {
-        console.warn('River playback error', err);
-      }
-    };
+          riverGain.gain.exponentialRampToValueAtTime(
+            Math.max(VOLUME.river, 0.0001), now + FADE_IN_RIVER / 1000
+          );
+        } catch (err) {
+          console.warn('River playback error', err);
+        }
+      };
 
-    startRiver();
-    fadeIn(audioMusic, VOLUME.music, FADE_IN_MUSIC);
+      if (riverBuffer) {
+        tryRiver();
+      } else {
+        // Decode (inside user gesture context) then play
+        decodeRiverBuffer().then(tryRiver);
+      }
+    }
+
+    // ── Music (HTML Audio element) ──
+    if (!musicPlaying) {
+      // On mobile the first .play() inside a gesture "unlocks" the element
+      audioMusic.volume = 0;
+      const playPromise = audioMusic.play();
+      if (playPromise && playPromise.then) {
+        playPromise.then(() => {
+          if (!musicPlaying) {
+            musicPlaying = true;
+            // Now fade in properly
+            let step = 0;
+            const steps = 60;
+            const stepTime = FADE_IN_MUSIC / steps;
+            const interval = setInterval(() => {
+              step++;
+              const t = step / steps;
+              audioMusic.volume = VOLUME.music * (t * t);
+              if (step >= steps) {
+                audioMusic.volume = VOLUME.music;
+                clearInterval(interval);
+              }
+            }, stepTime);
+          }
+        }).catch(() => {}); // silently fail, will retry on next gesture
+      }
+    }
+
+    // Once both are playing, remove gesture listeners
+    if (riverPlaying && musicPlaying) {
+      removeAudioListeners();
+    }
   }
 
-  // Hook into any user gesture to unlock audio
-  const startAudioEvents = ["click", "keydown", "touchstart"];
+  // Hook into user gestures to unlock audio
+  // Use "click" and "touchend" (iOS requires touchend, not touchstart)
+  const startAudioEvents = ["click", "keydown", "touchend"];
   startAudioEvents.forEach(evt => {
     document.addEventListener(evt, startAmbientAudio, { once: false });
   });
-  // Clean up listeners once started
+
   function removeAudioListeners() {
-    if (audioStarted) {
-      startAudioEvents.forEach(evt => {
-        document.removeEventListener(evt, startAmbientAudio);
-      });
-    }
+    startAudioEvents.forEach(evt => {
+      document.removeEventListener(evt, startAmbientAudio);
+    });
   }
-  // Check periodically to clean up
-  const cleanupCheck = setInterval(() => {
-    if (audioStarted) { removeAudioListeners(); clearInterval(cleanupCheck); }
-  }, 2000);
 
   let currentIndex = 0;
   let isAnimating  = false;
