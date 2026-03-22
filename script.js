@@ -81,13 +81,12 @@ Maybe it will help me understand who I am.
     body: `
       <p>
 I do not think eggs are supposed to sound the way mine did.
-Before I opened my eyes, I think something was already wrong. I remember the shell trembling at strange times, as though it feared what it carried. When I finally woke, the world had already been moving without me for some time. The shell around me had gone cold.
+Before I opened my eyes, I think something was already wrong. When I finally woke, the world had already been moving without me for some time. The shell around me had gone cold.
 On one of the broken pieces, there was a number carved so neatly that it could not have belonged to chance:
 <p class="emphasis-line">38114</p>
 <br/>
 <p>
-I still keep that piece with me. Sometimes I wonder if that was all I was ever meant to be. Not held. Not named. Only counted. 
-I am hoping the number means more than I can read from it alone. 
+I still keep that piece with me. I am hoping the number means more than I can read from it alone. 
 It looks like it was written in such hurry that it almost resembles letters. There's more, but I can't quite see it in this <span class="reveal-trigger" data-swap-to="assets/Images/egg secret.png" data-notice-text="Something became visible in the glow.." tabindex="0" role="button" aria-haspopup="true" aria-controls="reveal-notice" aria-label="Reveal in glow">glow</span>..
 Maybe if I learn more about who I am, it will begin to make sense somehow.
 </p>
@@ -123,18 +122,19 @@ There is something about me that does not feel as though I belong here.</p>
     body: `
       <p>The others seem so natural. So certain. Their lives fit around them neatly, as though they were born already knowing what shape they were meant to take. 
       I do not have that feeling. I feel as though I arrived from somewhere else. 
-      Somewhere colder, stranger. Sometimes, when I close my eyes, I almost remember waking to something black and white before I found myself here. 
+      Somewhere.. stranger. Sometimes, when I close my eyes, I almost remember waking to something black and white before I found myself here. 
       I do not understand that memory, only that it frightens me.
 <br/>
 <p>
 There was a scarf lying beside the shell when I woke.
 
-I have wrapped it around myself ever since. I do not know who it belonged to, but I have decided it must matter. I have chosen to believe it was not left behind by accident. 
+I have wrapped it around myself ever since. I have chosen to believe it was not left behind by accident. 
 Perhaps it belongs to the one who brought me here. Perhaps they will return for it one day, and when they do, I will tell them everything. 
 I will show them how carefully I kept it folded, how I tried to stay clean, how I waited. Rather a name than "Not Applicable".
 It is a comforting thought.</p>
     `
   },
+  
 
   // ── ENTRY 4 ────────────────────────────────────────────────
   {
@@ -142,7 +142,7 @@ It is a comforting thought.</p>
     date: "Day 3 — The Moon and a name",
     body: `
       <p>At night I like to hide beneath the bridge. Sometimes I sit in the bushes nearby and watch young trainers testing their <span class="reveal-trigger" data-overlay-src="assets/Images/City.png" tabindex="0" role="button" aria-haspopup="true" aria-controls="city-overlay" aria-label="Reveal city view">strength</span> against that girl they keep talking about. 
-      She speaks to her companions so gently. She looks at them as though they belong beside her. I try not to stare, but I always do.
+      She speaks to her companions so gently. I try not to stare, but I always do.
 I wonder what it feels like to be looked at that way.
 I wonder what my own name would have been, if someone had stayed long enough to give me one.
 <br/>
@@ -151,7 +151,14 @@ I wonder what my own name would have been, if someone had stayed long enough to 
         <span class="braille-text">⠎⠞⠗⠑⠝⠛⠞⠓</span>
         <span class="sr-only">Braille: strength</span>
       </p>
+    `
+  },
 
+  // ── ENTRY 5 ────────────────────────────────────────────────
+  {
+    type: "entry",
+    date: "",
+    body: `
 <p>
 The moon was beautiful tonight. I watched it spread silver across the sea, and for the first time, I felt that perhaps a name does not always have to be given. Perhaps sometimes it can be chosen.
 So I have chosen one for myself.
@@ -167,13 +174,14 @@ From now on, my name is <p class="emphasis-line">Veluna.</p>
     css: "overlay"
   },
 
-  // ── ENTRY 5 ────────────────────────────────────────────────
+  // ── ENTRY 6 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 4 — A fulfilling silence",
     body: `
       <p>Something was crying near the rocks tonight.
-At first I thought it was only the wind moving through the hollows, but when I followed the sound, I found a small creature curled tightly against the stone, trembling in a way that seemed deeper than cold. It was not just its body that hurt. Something inside it was restless, tangled, afraid.
+At first I thought it was only the wind moving through the hollows, but when I followed the sound, I found a small creature curled tightly against the stone. 
+Something inside it was restless, tangled, afraid.
 I did not know what to do.
 So I sat beside it and listened.
 That is when the sound came from me.
@@ -184,34 +192,34 @@ For a little while, neither of us was afraid.</p>
     `
   },
 
-  // ── ENTRY 6 ────────────────────────────────────────────────
+  // ── ENTRY 7 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 5 — A hidden protector",
     body: `
       <p>There is a part of last night I cannot remember.
-I have tried to place it in order, but it breaks apart every time I get close, like wet paper in trembling hands. I remember the path. 
+I have tried to place it in order, but it breaks apart every time I get close, like wet paper in trembling hands.
 I remember footsteps. I remember the feeling of being watched too closely, with the kind of attention that does not feel like kindness. I remember backing away.
 Then I remember nothing. Only what came after. 
-<br/>
 <br/>
 <p>
 The earth was torn where I stood. The air smelled sharp, as though something violent had split through it. The one who had come near me was lying several steps away, staring not with anger, but with the wide, hollow fear of someone who has seen something they do not understand.
 No one has come close in quite the same way since. At least thirty seconds are gone from my memory.
-I wish I knew what happened in that missing space. I wish I could say it was not me. But somewhere inside myself, when I think too long about it, I feel the shape of an answer I do not want.
+
 </p>
 
      </p>
     `
   },
 
-  // ── ENTRY 7 ────────────────────────────────────────────────
+  // ── ENTRY 8 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "",
     body: `
       <p>
-I think there is something in me that wakes only when I am struck.
+I wish I knew what happened in that missing space. I wish I could say it was not me. 
+But somewhere inside myself, when I think too long about it, I feel the shape of an answer I do not want.I think there is something in me that wakes only when I am struck.
 Not rage. Not hatred.
 Something older than choice.
 Something that does not protect me gently.
@@ -224,7 +232,7 @@ And more frightened still that, when it was over, part of me felt relieved. </p>
     `
   },
 
-  // ── ENTRY 8 ────────────────────────────────────────────────
+  // ── ENTRY 9 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 6 — The Sound from within",
@@ -239,7 +247,7 @@ After that, everything seemed to change a little.</p>
     `
   },
 
-  // ── ENTRY 9 ────────────────────────────────────────────────
+  // ── ENTRY 10 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "",
@@ -258,45 +266,41 @@ There are parts of me that only seem to wake when no one is watching.</p>
     `
   },
 
-  // ── ENTRY 10 ────────────────────────────────────────────────
+  // ── ENTRY 11 ────────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 7 — I can be like them",
     body: `
       <p>I watched them again today.
-Not from very close. I do not think I am brave enough for that yet. But from the bushes, through the leaves, I can see quite a lot.
+Not from very close. I do not think I am brave enough for that yet. From the bushes, through the leaves, I can see quite a lot.
 There is a way the others move when they are certain they belong. I do not know how to describe it properly. Nothing about it seems forced. They laugh when something is funny. 
 They tilt their heads at the right moments. They step forward when spoken to, and back when they should. 
-Even their silence seems natural, as though they have always known what shape to make of themselves in the company of others.
 I wanted to understand that.
-So I began watching more carefully.
-The way one of them lifted a hand before speaking. The little change in another’s voice when they were trying to sound brave. The pause before laughter. 
-The way one creature stamped the ground when it wanted to appear bigger than it felt. I told myself I was only curious.
+So I began watching more carefully. I told myself I was only curious.
 But when I was alone later, I found myself doing all of it.
 The same tilt of the head. The same small sound. The same careful little pause before a movement that was not really mine.
+It frightened me at first, how easily it happened. Not because it hurt, 
+but I could imagine that if someone had seen me then, only for a few moments, only from a distance, they might have mistaken me for something ordinary.
 
 </p>
     `
   },
 
-  // ── ENTRY 11 ───────────────────────────────────────────────
+  // ── ENTRY 12 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "",
     body: `
     
-      <p>It frightened me at first, how easily it happened. Not because it hurt, but because it almost worked.
-For a few moments, I could imagine that if someone had seen me then, only for a few moments, only from a distance, they might have mistaken me for something ordinary. Something social. 
-Something that had grown up in the right place, among the right voices, learning the right way to exist. But the feeling never lasts.
-The borrowed gestures always begin to slip. The copied sounds seem strange, and then I am only myself again, or whatever “myself” is meant to mean.
+      <p>
+Something that had grown up in the right place, among the right voices, learning the right way to exist. But the movement never lasts.
+The borrowed gestures always begin to slip. The copied sounds seem strange, and then I am only myself again.
 <br/>
 <p>
 I do not know whether I imitate others because I admire them, or because I am trying to build a shape from all the pieces I seem to be missing.
 Maybe both.
 I only know that sometimes, after watching others long enough, I can almost believe I could become easier to love if I learned the pattern well enough.
-That is the part I am most ashamed to write.
-Not that I imitate them.
-But that, deep down, I still hope it might work.</p>
+That is the part I am most ashamed to write.</p>
 <p class="morse-clue" role="note" aria-hidden="false">
         <span class="morse-text">-.-- --- .-. -.. ...</span>
         <span class="sr-only">Morse: words</span>
@@ -304,7 +308,7 @@ But that, deep down, I still hope it might work.</p>
     `
   },
 
-   // ── ENTRY 12 ───────────────────────────────────────────────
+   // ── ENTRY 13 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 8 - Stargazing",
@@ -317,19 +321,20 @@ Five of them burned steadily.
 One did not.
 It was not gone. Only quieter than the others. Dim in a way that felt familiar, as though whatever should have lived there had never fully woken. 
 I do not know why that thought comforted me, but it did. There is relief in believing that some things were never stolen from us. Only never lit to begin with.
-The other five seemed almost too clear by comparison. Too sharp. Too complete. It made the dim one feel less like a flaw, and more like a truth.
-I think that is what frightens others sometimes. Not that something is broken in me, but that so much of me feels almost too exact, while one part remains strangely absent.
+
 </p>
 
     `
   },
 
-   // ── ENTRY 13 ───────────────────────────────────────────────
+   // ── ENTRY 14 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "",
     body: `
-      <p>If I am honest, I do not think I was ever meant for hurting.
+      <p>The other five seemed almost too clear by comparison. Too sharp. Too complete. It made the dim one feel less like a flaw, and more like a truth.
+I think that is what frightens others sometimes. Not that something is broken in me, but that so much of me feels almost too exact, while one part remains strangely absent.
+If I am honest, I do not think I was ever meant for hurting.
 Maybe that is the quiet star.
 Maybe that is why the others shine so bright around it. </p>
 
@@ -339,29 +344,26 @@ Maybe that is why the others shine so bright around it. </p>
     `
   },
 
-   // ── ENTRY 14 ───────────────────────────────────────────────
+   // ── ENTRY 15 ───────────────────────────────────────────────
   {
     type: "entry",
     date: "Day 9 - New beginnings",
     body: `
       <p>I am running out of pages to write.
-This journal helped more than I thought it would. It did not fix me, and it did not answer every question I have. But it gave me a place to put the thoughts that were too heavy to carry by myself.
+This journal helped more than I thought it would. It gave me a place to put the thoughts that were too heavy to carry by myself.
 That made a difference.
-I still do not know exactly what I am, or why my life began the way it did.
+I still do not know who I am, or why my life began the way it did.
 However, I have learned that not understanding everything does not mean there is no way forward.
-The sea keeps moving. The nights pass.
 The world keeps going, even when it is quiet.
 So will I.
 <br/>
-And maybe, someday, I will see that strange flash of black and white again. Maybe it will lead me somewhere I was always meant to be.
+And maybe, someday, I will see that strange flash of black and white again. Maybe it will lead me to where I was always meant to be.
 If that day comes, I hope there will be someone kind waiting for me.
 And perhaps, at last, a warm and gentle place to rest.
 Maybe that is enough to hope for.
 For now, it is enough for me to keep going...
 <br/>
-<br/>
-  <span class="signature-inline">Sincerely,
-  <p class="emphasis">Veluna.</p>
+  <span class="signature-inline">Sincerely, <span class="emphasis">Veluna.</span></span>
     </p>
     `
   },
@@ -379,7 +381,7 @@ For now, it is enough for me to keep going...
         <p>Level: ? OT Name: ?</p>
         <p>TID: ?  SID: ?  PID: ?</p>
         <p>Move 1: ? Move 2: ? Move 3: ? Move 4: ?</p>
-        <p>Origin game: ?  Met Location: ?</p>
+        <p>Origin game: ?  Met Location: ? IVs: ?</p>
       </div>
       <div class="page-illustration page-illustration--bottom">
         <img src="assets/Images/Veluna%20code%20fragments.png" alt="Veluna code fragments" draggable="false" />
