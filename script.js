@@ -347,21 +347,21 @@ Maybe that is why the others shine so bright around it. </p>
       <p>I am running out of pages to write.
 This journal helped more than I thought it would. It did not fix me, and it did not answer every question I have. But it gave me a place to put the thoughts that were too heavy to carry by myself.
 That made a difference.
-I still do not know exactly what I am, or why my life began the way it did. Some days that still hurts.
-But I have learned that not understanding everything does not mean there is no way forward.
-The sea keeps moving.
-The nights pass.
+I still do not know exactly what I am, or why my life began the way it did.
+However, I have learned that not understanding everything does not mean there is no way forward.
+The sea keeps moving. The nights pass.
 The world keeps going, even when it is quiet.
 So will I.
 <br/>
-And maybe, someday, I will see that strange flash of black and white again. Maybe it will not feel cold next time. Maybe it will lead me somewhere I was always meant to be.
-If that day comes, I hope I will not be alone when it does.
-I hope there will be someone kind waiting for me.
+And maybe, someday, I will see that strange flash of black and white again. Maybe it will lead me somewhere I was always meant to be.
+If that day comes, I hope there will be someone kind waiting for me.
 And perhaps, at last, a warm and gentle place to rest.
 Maybe that is enough to hope for.
 For now, it is enough for me to keep going...
 <br/>
-  <span class="signature-inline">Sincerely,&nbsp;<span class="name">Veluna</span></span>
+<br/>
+  <span class="signature-inline">Sincerely,
+  <p class="emphasis">Veluna.</p>
     </p>
     `
   },
@@ -372,7 +372,7 @@ For now, it is enough for me to keep going...
     body: `
       <p><br/></p>
       <p>The final page seems impossible to read..</p>
-      <p>It seems like someone has attempted to restore their identity?</p>
+      <p>Has someone attempted to restore their identity?</p>
       <div class="older-text">
         <p>Species name: ?</p>
         <p>Nature: ? Ability: ?</p>
