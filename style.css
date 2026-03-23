@@ -77,6 +77,52 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ---------- Intro: fade-from-black + journal approach ---------- */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+.intro-overlay.fade-out {
+  opacity: 0;
+}
+
+.journal.intro-zoom {
+  transform: scale(0.65) translateY(30px);
+  opacity: 0;
+}
+.journal.intro-zoom.intro-reveal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1), opacity 2.5s ease;
+}
+
+/* ---------- Time-of-Day: Sunlight cast on journal ---------- */
+.journal-light {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius);
+  pointer-events: none;
+  z-index: 25;
+  opacity: 0;
+  transition: opacity 10s linear, background 10s linear;
+  mix-blend-mode: screen;
+}
+
+/* ---------- Time-of-Day: Atmosphere tint overlay ---------- */
+.atmosphere-tint {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: background 10s linear, opacity 10s linear;
+  opacity: 0;
+}
+
 /* ---------- Atmosphere / Background ---------- */
 /* 
    BACKGROUND IMAGE: Place your image in assets/bg.jpg (or .png)
@@ -974,6 +1020,12 @@ body {
 }
 
 /* ---------- (Page settle removed — layered flip is seamless) ---------- */
+
+/* Reduce particles at night via the atmosphere system (JS toggles this) */
+@media (prefers-reduced-motion: reduce) {
+  /* Hide particles entirely for users who prefer reduced motion */
+  .pollen-container { display: none !important; }
+}
 
 /* ---------- Accessibility: focus outlines ---------- */
 .click-zone:focus-visible,

@@ -431,6 +431,8 @@ For now, it is enough for me to keep going...
     river:     0.25,   // ambient river / water loop
     music:     0.18,   // "Silent Echoes of the Depths" background music
     fragment:  0.65,   // click-to-play fragment sound
+    cricket:   0.20,   // nighttime cricket ambient loop
+    birds:     0.22,   // daytime bird ambient loop
   };
 
   // Fade-in durations (milliseconds)
@@ -482,6 +484,66 @@ For now, it is enough for me to keep going...
   const audioMusic = new Audio(SND_MUSIC);
   audioMusic.loop = true;
   audioMusic.volume = 0; // starts silent, fades in
+
+  // ── Cricket / night ambient audio ──
+  const SND_CRICKET = "sounds/crickets.wav";
+  let cricketBuffer = null;
+  let cricketRawBuffer = null;
+  let cricketSource = null;
+  let cricketGain = null;
+  let cricketPlaying = false;
+
+  async function prefetchCricketBuffer() {
+    try {
+      const resp = await fetch(SND_CRICKET);
+      cricketRawBuffer = await resp.arrayBuffer();
+    } catch (e) {
+      console.warn('Cricket sound not found — place your file at sounds/crickets.wav');
+    }
+  }
+  prefetchCricketBuffer();
+
+  async function decodeCricketBuffer() {
+    if (cricketBuffer) return;
+    if (!cricketRawBuffer) return;
+    if (!webAudioCtx) return;
+    try {
+      const copy = cricketRawBuffer.slice(0);
+      cricketBuffer = await webAudioCtx.decodeAudioData(copy);
+    } catch (e) {
+      console.warn('Failed to decode cricket audio:', e);
+    }
+  }
+
+  // ── Birds / daytime ambient audio ──
+  const SND_BIRDS = "sounds/Birds.wav";
+  let birdsBuffer = null;
+  let birdsRawBuffer = null;
+  let birdsSource = null;
+  let birdsGain = null;
+  let birdsPlaying = false;
+
+  async function prefetchBirdsBuffer() {
+    try {
+      const resp = await fetch(SND_BIRDS);
+      birdsRawBuffer = await resp.arrayBuffer();
+    } catch (e) {
+      console.warn('Birds sound not found — place your file at sounds/Birds.wav');
+    }
+  }
+  prefetchBirdsBuffer();
+
+  async function decodeBirdsBuffer() {
+    if (birdsBuffer) return;
+    if (!birdsRawBuffer) return;
+    if (!webAudioCtx) return;
+    try {
+      const copy = birdsRawBuffer.slice(0);
+      birdsBuffer = await webAudioCtx.decodeAudioData(copy);
+    } catch (e) {
+      console.warn('Failed to decode birds audio:', e);
+    }
+  }
 
   // ── Play page-turn sound ──
   function playPageTurn() {
@@ -1256,6 +1318,362 @@ For now, it is enough for me to keep going...
   // ── Run pagination then initialize ──
   paginateEntries();
   showPage(0);
+
+  // ── Intro: fade from black + journal approach ──
+  journal.classList.add('intro-zoom');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const overlay = document.getElementById('intro-overlay');
+      if (overlay) overlay.classList.add('fade-out');
+      journal.classList.add('intro-reveal');
+      // Clean up after animation
+      setTimeout(() => {
+        if (overlay) overlay.remove();
+        journal.classList.remove('intro-zoom', 'intro-reveal');
+      }, 3500);
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  //  TIME-OF-DAY ATMOSPHERE
+  //  Simulated sunlight moves across the journal page from left
+  //  to right during daytime (5am–8pm). At night the page
+  //  darkens and cricket sounds crossfade with the river.
+  // ─────────────────────────────────────────────────────────────
+
+  // Create the light-cast overlay inside the journal
+  const journalLightEl = document.createElement('div');
+  journalLightEl.className = 'journal-light';
+  journal.appendChild(journalLightEl);
+
+  // Create the atmosphere tint overlay (sits behind vignette)
+  const atmTint = document.createElement('div');
+  atmTint.className = 'atmosphere-tint';
+  document.body.insertBefore(atmTint, document.querySelector('.vignette'));
+
+  /**
+   * Returns a fractional hour (0–24) from the current local time.
+   * e.g. 14.5 = 2:30 PM
+   */
+  function getFractionalHour() {
+    const now = new Date();
+    return now.getHours() + now.getMinutes() / 60;
+  }
+
+  /**
+   * Compute all time-of-day visual properties from a fractional hour.
+   *
+   *  Dawn    : 5–7      (sun rises on left)
+   *  Morning : 7–12     (sun climbs to top-center)
+   *  Afternoon: 12–17   (sun moves right and descends)
+   *  Dusk    : 17–20    (sun sets on right, warm orange)
+   *  Night   : 20–5     (moon, darkness)
+   */
+  function computeTimeOfDay(h) {
+    const isNight = h >= 20 || h < 5;
+    const isDawn  = h >= 5 && h < 7;
+    const isDusk  = h >= 17 && h < 20;
+
+    // ── Sun / Moon arc position ──
+    // Map the daytime range (5–20) to 0–1 for the arc
+    let arcT = 0;
+    if (h >= 5 && h < 20) {
+      arcT = (h - 5) / 15; // 0 at dawn, 1 at dusk
+    } else if (h >= 20) {
+      arcT = 1;
+    }
+
+    // Horizontal position of simulated sun: 8% → 92% of page width
+    const orbX = 8 + arcT * 84;
+
+    // ── Page warmth / light intensity ──
+    let lightIntensity = 0;  // 0–1
+    let lightAngle = orbX;   // where the light comes from (%)
+    if (!isNight) {
+      // Bell curve peaking at solar noon (~12:30)
+      const noon = 12.5;
+      const spread = 5;
+      lightIntensity = Math.exp(-0.5 * ((h - noon) / spread) ** 2);
+      if (isDawn || isDusk) lightIntensity *= 0.4;
+    }
+
+    // ── Atmosphere tint ──
+    let tintColor, tintOpacity;
+    if (isNight) {
+      tintColor = 'rgba(10, 15, 30, 0.55)';
+      tintOpacity = 1;
+    } else if (isDawn) {
+      const t = (h - 5) / 2; // 0→1 over dawn
+      tintColor = `rgba(${Math.round(40 - t * 30)}, ${Math.round(20 + t * 2)}, ${Math.round(40 - t * 23)}, ${(0.4 - t * 0.35).toFixed(2)})`;
+      tintOpacity = 1;
+    } else if (isDusk) {
+      const t = (h - 17) / 3; // 0→1 over dusk
+      tintColor = `rgba(${Math.round(10 + t * 0)}, ${Math.round(8 + t * 7)}, ${Math.round(5 + t * 25)}, ${(0.05 + t * 0.5).toFixed(2)})`;
+      tintOpacity = 1;
+    } else {
+      // Daytime — very subtle warm wash
+      tintColor = 'rgba(255, 240, 200, 0.04)';
+      tintOpacity = 1;
+    }
+
+    // ── Vignette darkness ──
+    let vignetteDarkness = isNight ? 0.75 : (isDusk ? 0.55 + ((h - 17) / 3) * 0.2 : 0.55);
+
+    return {
+      isNight, isDawn, isDusk, arcT,
+      orbX,
+      lightIntensity, lightAngle,
+      tintColor, tintOpacity,
+      vignetteDarkness
+    };
+  }
+
+  /**
+   * Apply time-of-day visuals to the DOM.
+   */
+  function applyTimeOfDay() {
+    const h = getFractionalHour();
+    const tod = computeTimeOfDay(h);
+
+    // ── Light cast on journal page ──
+    if (tod.lightIntensity > 0.02) {
+      // Radial gradient from the sun's direction
+      const gradX = tod.lightAngle;
+      // Warm elliptical glow + a broader secondary wash
+      const primary = (tod.lightIntensity * 0.30).toFixed(3);
+      const secondary = (tod.lightIntensity * 0.10).toFixed(3);
+      journalLightEl.style.background =
+        `radial-gradient(ellipse at ${gradX}% 20%, rgba(255,240,200,${primary}) 0%, transparent 60%),
+         radial-gradient(ellipse at ${gradX}% 50%, rgba(255,245,220,${secondary}) 0%, transparent 80%)`;
+      journalLightEl.style.opacity = '1';
+    } else {
+      journalLightEl.style.opacity = '0';
+    }
+
+    // ── Atmosphere tint ──
+    atmTint.style.background = tod.tintColor;
+    atmTint.style.opacity = tod.tintOpacity;
+
+    // ── Vignette darkness ──
+    const vignette = document.querySelector('.vignette');
+    if (vignette) {
+      vignette.style.background = `radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,${tod.vignetteDarkness}) 100%)`;
+    }
+
+    // ── Cricket / Birds / River crossfade ──
+    crossfadeAmbience(tod.isNight);
+  }
+
+  /**
+   * Crossfade between day sounds (river + birds) and night sounds
+   * (crickets, river faded down). Smoothly ramps over ~3 seconds.
+   *
+   *  Day  (dawn → dusk):  river full + birds full,  crickets silent
+   *  Night (dusk → dawn): crickets full, river quiet, birds silent
+   */
+  let lastAmbienceState = null; // 'day' | 'night'
+
+  function crossfadeAmbience(isNight) {
+    const target = isNight ? 'night' : 'day';
+    if (target === lastAmbienceState) return;
+    lastAmbienceState = target;
+
+    const fadeSec = 3;
+
+    // ── River: full during day, very quiet at night ──
+    if (riverGain && webAudioCtx) {
+      const now = webAudioCtx.currentTime;
+      const riverTarget = isNight ? 0.0001 : Math.max(VOLUME.river, 0.0001);
+      riverGain.gain.cancelScheduledValues(now);
+      riverGain.gain.setValueAtTime(riverGain.gain.value, now);
+      riverGain.gain.exponentialRampToValueAtTime(riverTarget, now + fadeSec);
+    }
+
+    // ── Birds: play during day, fade out at night ──
+    if (!isNight) {
+      startBirdsAudio();
+      if (birdsGain && webAudioCtx) {
+        const now = webAudioCtx.currentTime;
+        birdsGain.gain.cancelScheduledValues(now);
+        birdsGain.gain.setValueAtTime(birdsGain.gain.value, now);
+        birdsGain.gain.exponentialRampToValueAtTime(
+          Math.max(VOLUME.birds, 0.0001), now + fadeSec
+        );
+      }
+    } else {
+      if (birdsGain && webAudioCtx) {
+        const now = webAudioCtx.currentTime;
+        birdsGain.gain.cancelScheduledValues(now);
+        birdsGain.gain.setValueAtTime(birdsGain.gain.value, now);
+        birdsGain.gain.exponentialRampToValueAtTime(0.0001, now + fadeSec);
+      }
+    }
+
+    // ── Crickets: play at night, fade out during day ──
+    if (isNight) {
+      startCricketAudio();
+      if (cricketGain && webAudioCtx) {
+        const now = webAudioCtx.currentTime;
+        cricketGain.gain.cancelScheduledValues(now);
+        cricketGain.gain.setValueAtTime(cricketGain.gain.value, now);
+        cricketGain.gain.exponentialRampToValueAtTime(
+          Math.max(VOLUME.cricket, 0.0001), now + fadeSec
+        );
+      }
+    } else {
+      if (cricketGain && webAudioCtx) {
+        const now = webAudioCtx.currentTime;
+        cricketGain.gain.cancelScheduledValues(now);
+        cricketGain.gain.setValueAtTime(cricketGain.gain.value, now);
+        cricketGain.gain.exponentialRampToValueAtTime(0.0001, now + fadeSec);
+      }
+    }
+  }
+
+  /**
+   * Start the birds WebAudio loop (only runs once).
+   */
+  function startBirdsAudio() {
+    if (birdsPlaying) return;
+    if (!webAudioCtx) return;
+    if (!birdsBuffer) {
+      decodeBirdsBuffer().then(() => {
+        if (birdsBuffer) startBirdsAudio();
+      });
+      return;
+    }
+    try {
+      birdsSource = webAudioCtx.createBufferSource();
+      birdsSource.buffer = birdsBuffer;
+      birdsSource.loop = true;
+      birdsGain = webAudioCtx.createGain();
+      birdsGain.gain.value = 0.0001;
+      birdsSource.connect(birdsGain);
+      birdsGain.connect(webAudioCtx.destination);
+      birdsSource.start(0);
+      birdsPlaying = true;
+    } catch (e) {
+      console.warn('Birds playback error', e);
+    }
+  }
+
+  /**
+   * Start the cricket WebAudio loop (only runs once).
+   */
+  function startCricketAudio() {
+    if (cricketPlaying) return;
+    if (!webAudioCtx) return;
+    if (!cricketBuffer) {
+      decodeCricketBuffer().then(() => {
+        if (cricketBuffer) startCricketAudio();
+      });
+      return;
+    }
+    try {
+      cricketSource = webAudioCtx.createBufferSource();
+      cricketSource.buffer = cricketBuffer;
+      cricketSource.loop = true;
+      cricketGain = webAudioCtx.createGain();
+      cricketGain.gain.value = 0.0001;
+      cricketSource.connect(cricketGain);
+      cricketGain.connect(webAudioCtx.destination);
+      cricketSource.start(0);
+      cricketPlaying = true;
+    } catch (e) {
+      console.warn('Cricket playback error', e);
+    }
+  }
+
+  // ── Initialize and update every 60 seconds ──
+  applyTimeOfDay();
+  setInterval(applyTimeOfDay, 60000);
+
+  // ─────────────────────────────────────────────────────────────
+  //  POLLEN / DUST PARTICLES
+  //  Tiny floating motes that drift across the screen on a
+  //  gentle, wavy path — like pollen caught in a slow breeze.
+  // ─────────────────────────────────────────────────────────────
+
+  const pollenContainer = document.createElement('div');
+  pollenContainer.style.cssText =
+    'position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden;';
+  document.body.appendChild(pollenContainer);
+
+  const POLLEN_COUNT = 18;          // total motes alive at once
+  const POLLEN_SPAWN_INTERVAL = 3500; // ms between new spawns
+  let activePollen = 0;
+
+  function spawnMote() {
+    if (activePollen >= POLLEN_COUNT) return;
+    activePollen++;
+
+    const mote = document.createElement('div');
+    const size = 2 + Math.random() * 3;            // 2–5px
+    const opacity = 0.15 + Math.random() * 0.25;   // subtle
+    const duration = 18 + Math.random() * 22;      // 18–40s drift
+    const startX = Math.random() * 100;            // anywhere across the screen
+    const startY = Math.random() * 100;            // anywhere top to bottom
+
+    // Unique wavy path via random parameters
+    const wavAmpY = 30 + Math.random() * 60;       // vertical sway px
+    const wavFreqY = 1 + Math.random() * 2;        // wave cycles
+    const wavAmpX = 10 + Math.random() * 25;       // horizontal wobble px
+    const wavFreqX = 0.5 + Math.random() * 1.5;
+    // Drift in a random direction (not always rightward)
+    const angle = Math.random() * Math.PI * 2;
+    const driftDist = 40 + Math.random() * 60;
+    const driftX = Math.cos(angle) * driftDist;    // horizontal drift px
+    const driftY = Math.sin(angle) * driftDist;    // vertical drift px
+
+    mote.style.cssText = `
+      position:absolute;
+      width:${size}px;
+      height:${size}px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(255,245,210,${opacity}),rgba(255,230,180,${opacity * 0.3}) 70%,transparent);
+      box-shadow:0 0 ${size}px rgba(255,240,200,${opacity * 0.4});
+      left:${startX}vw;
+      top:${startY}vh;
+      opacity:0;
+      will-change:transform,opacity;
+    `;
+
+    pollenContainer.appendChild(mote);
+
+    // Animate via keyframes for smooth, GPU-accelerated motion
+    const keyframes = [];
+    const steps = 60;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const x = driftX * t + wavAmpX * Math.sin(t * wavFreqX * Math.PI * 2);
+      const y = driftY * t + wavAmpY * Math.sin(t * wavFreqY * Math.PI * 2);
+      // Fade in first 15%, fade out last 20%
+      let o = 1;
+      if (t < 0.15) o = t / 0.15;
+      else if (t > 0.80) o = (1 - t) / 0.20;
+      keyframes.push({
+        transform: `translate(${x}px, ${y}px)`,
+        opacity: o
+      });
+    }
+
+    const anim = mote.animate(keyframes, {
+      duration: duration * 1000,
+      easing: 'linear',
+      fill: 'forwards'
+    });
+
+    anim.onfinish = () => {
+      mote.remove();
+      activePollen--;
+    };
+  }
+
+  // Stagger initial spawns so they don't all appear at once
+  for (let i = 0; i < 6; i++) {
+    setTimeout(spawnMote, i * 800);
+  }
+  setInterval(spawnMote, POLLEN_SPAWN_INTERVAL);
 
   // Debug helper: expose compiled pages summary and quick navigation
   try {
