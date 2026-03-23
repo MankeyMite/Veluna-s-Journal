@@ -431,12 +431,12 @@ For now, it is enough for me to keep going...
     river:     0.25,   // ambient river / water loop
     music:     0.18,   // "Silent Echoes of the Depths" background music
     fragment:  0.65,   // click-to-play fragment sound
-    cricket:   0.20,   // nighttime cricket ambient loop
-    birds:     0.22,   // daytime bird ambient loop
+    cricket:   0.28,   // nighttime cricket ambient loop
+    birds:     0.30,   // daytime bird ambient loop
   };
 
   // Fade-in durations (milliseconds)
-  const FADE_IN_RIVER = 5000;   // river fades in over 5 seconds
+  const FADE_IN_RIVER = 2000;   // river fades in over 2 seconds
   const FADE_IN_MUSIC = 6000;   // music fades in over 6 seconds
   // ─────────────────────────────────────────────────────────────
 
@@ -449,43 +449,46 @@ For now, it is enough for me to keep going...
   const audioPageTurn = new Audio(SND_PAGE_TURN);
   audioPageTurn.volume = VOLUME.pageTurn;
 
-  // Use WebAudio for a gapless river loop
+  // Use HTML Audio + WebAudio MediaElementSource for the river
+  // (streams immediately instead of waiting for full 66MB download)
+  const audioRiver = new Audio(SND_RIVER);
+  audioRiver.loop = true;
+  audioRiver.preload = 'auto';
   let webAudioCtx = null;
-  let riverBuffer = null;
-  let riverRawBuffer = null; // raw ArrayBuffer fetched at load time
   let riverSource = null;
   let riverGain = null;
 
-  // Pre-fetch the river file as a raw ArrayBuffer (no AudioContext needed)
-  async function prefetchRiverBuffer() {
+  function startRiver() {
+    if (riverPlaying) return;
+    ensureAudioContext();
     try {
-      const resp = await fetch(SND_RIVER);
-      riverRawBuffer = await resp.arrayBuffer();
-    } catch (e) {
-      console.warn('Failed to prefetch river audio:', e);
+      // Wrap HTML Audio element in WebAudio for gain control
+      if (!riverSource) {
+        riverSource = webAudioCtx.createMediaElementSource(audioRiver);
+        riverGain = webAudioCtx.createGain();
+        riverGain.gain.value = 0.0001;
+        riverSource.connect(riverGain);
+        riverGain.connect(webAudioCtx.destination);
+      }
+      audioRiver.play().then(() => {
+        riverPlaying = true;
+        const now = webAudioCtx.currentTime;
+        riverGain.gain.cancelScheduledValues(now);
+        riverGain.gain.setValueAtTime(0.0001, now);
+        riverGain.gain.exponentialRampToValueAtTime(
+          Math.max(VOLUME.river, 0.0001), now + FADE_IN_RIVER / 1000
+        );
+      }).catch(err => console.warn('River playback error', err));
+    } catch (err) {
+      console.warn('River setup error', err);
     }
   }
-  prefetchRiverBuffer();
 
-  // Decode the raw buffer into an AudioBuffer (requires an AudioContext)
-  async function decodeRiverBuffer() {
-    if (riverBuffer) return; // already decoded
-    if (!riverRawBuffer) return;
-    if (!webAudioCtx) return;
-    try {
-      // decodeAudioData consumes the buffer, so copy it first
-      const copy = riverRawBuffer.slice(0);
-      riverBuffer = await webAudioCtx.decodeAudioData(copy);
-    } catch (e) {
-      console.warn('Failed to decode river audio:', e);
-    }
-  }
-
+  // ── Cricket / night ambient audio ──
   const audioMusic = new Audio(SND_MUSIC);
   audioMusic.loop = true;
   audioMusic.volume = 0; // starts silent, fades in
 
-  // ── Cricket / night ambient audio ──
   const SND_CRICKET = "sounds/crickets.wav";
   let cricketBuffer = null;
   let cricketRawBuffer = null;
@@ -577,85 +580,51 @@ For now, it is enough for me to keep going...
   let riverPlaying = false;
   let musicPlaying = false;
 
-  function startAmbientAudio() {
-    // ── Ensure AudioContext exists and is running ──
+  function ensureAudioContext() {
     if (!webAudioCtx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       webAudioCtx = new AC();
     }
-    // Resume suspended context (required on iOS/mobile)
     if (webAudioCtx.state === 'suspended') {
       webAudioCtx.resume().catch(() => {});
     }
+  }
 
-    // ── River (WebAudio BufferSource loop) ──
-    if (!riverPlaying) {
-      const tryRiver = () => {
-        if (riverPlaying) return;
-        if (!riverBuffer) return; // not decoded yet
-        try {
-          if (riverSource) { try { riverSource.stop(); } catch (e) {} }
-          riverSource = webAudioCtx.createBufferSource();
-          riverSource.buffer = riverBuffer;
-          riverSource.loop = true;
-          riverGain = webAudioCtx.createGain();
-          riverGain.gain.value = 0.0001;
-          riverSource.connect(riverGain);
-          riverGain.connect(webAudioCtx.destination);
-          riverSource.start(0);
-          riverPlaying = true;
-
-          // Fade gain up
-          const now = webAudioCtx.currentTime;
-          riverGain.gain.cancelScheduledValues(now);
-          riverGain.gain.setValueAtTime(0.0001, now);
-          riverGain.gain.exponentialRampToValueAtTime(
-            Math.max(VOLUME.river, 0.0001), now + FADE_IN_RIVER / 1000
-          );
-        } catch (err) {
-          console.warn('River playback error', err);
+  function startMusic() {
+    if (musicPlaying) return;
+    audioMusic.volume = 0;
+    const playPromise = audioMusic.play();
+    if (playPromise && playPromise.then) {
+      playPromise.then(() => {
+        if (!musicPlaying) {
+          musicPlaying = true;
+          let step = 0;
+          const steps = 60;
+          const stepTime = FADE_IN_MUSIC / steps;
+          const interval = setInterval(() => {
+            step++;
+            const t = step / steps;
+            audioMusic.volume = VOLUME.music * (t * t);
+            if (step >= steps) {
+              audioMusic.volume = VOLUME.music;
+              clearInterval(interval);
+            }
+          }, stepTime);
         }
-      };
-
-      if (riverBuffer) {
-        tryRiver();
-      } else {
-        // Decode (inside user gesture context) then play
-        decodeRiverBuffer().then(tryRiver);
-      }
+      }).catch(() => {});
     }
+  }
 
-    // ── Music (HTML Audio element) ──
+  function startAmbientAudio() {
+    ensureAudioContext();
+    // Start river immediately
+    startRiver();
+    // Delay music so river is heard first
     if (!musicPlaying) {
-      // On mobile the first .play() inside a gesture "unlocks" the element
-      audioMusic.volume = 0;
-      const playPromise = audioMusic.play();
-      if (playPromise && playPromise.then) {
-        playPromise.then(() => {
-          if (!musicPlaying) {
-            musicPlaying = true;
-            // Now fade in properly
-            let step = 0;
-            const steps = 60;
-            const stepTime = FADE_IN_MUSIC / steps;
-            const interval = setInterval(() => {
-              step++;
-              const t = step / steps;
-              audioMusic.volume = VOLUME.music * (t * t);
-              if (step >= steps) {
-                audioMusic.volume = VOLUME.music;
-                clearInterval(interval);
-              }
-            }, stepTime);
-          }
-        }).catch(() => {}); // silently fail, will retry on next gesture
-      }
+      setTimeout(startMusic, 3000);
     }
-
-    // Once both are playing, remove gesture listeners
-    if (riverPlaying && musicPlaying) {
-      removeAudioListeners();
-    }
+    // Remove gesture listeners — river+music are now queued
+    removeAudioListeners();
   }
 
   // Hook into user gestures to unlock audio
