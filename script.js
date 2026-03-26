@@ -63,7 +63,7 @@ const PAGES = [
       </p>
       <br/>
       <p class="faded-ink">
-        I found this empty journal by the sea.
+        I found this empty journal by the river.
 Maybe if I begin writing my thoughts down, they will stop circling inside me.
 Maybe it will help me understand who I am.
       </p>
@@ -97,7 +97,7 @@ Maybe if I learn more about who I am, it will begin to make sense somehow.
     type: "entry",
     date: "",
     body: `
-      <p>The sea beside the city is so blue that when the sun begins to sink, it feels as though the whole world has been dipped in one quiet color. 
+      <p>The river beside the city is so blue that when the sun begins to sink, it feels as though the whole world has been dipped in one quiet color. 
       I like to sit there and watch the reflections. Sometimes, when I look too long, I notice something strange about my own.
 I do not look like the others.
 At first I thought it was only the light, or the water playing tricks on me. 
@@ -241,7 +241,7 @@ And more frightened still that, when it was over, part of me felt relieved. </p>
     type: "entry",
     date: "Day 6 — The Sound from within",
     body: `
-      <p>The sea was restless for most of the evening, but by night it had quieted into something softer. 
+      <p>The river was restless for most of the evening, but by night it had quieted into something softer. 
       I sat where the stones were still warm from the day and watched the moon scatter itself across the water in pale pieces.
 I do not know how long I stayed there.
 At some point, a sound left me.
@@ -431,8 +431,9 @@ For now, it is enough for me to keep going...
     river:     0.25,   // ambient river / water loop
     music:     0.18,   // "Silent Echoes of the Depths" background music
     fragment:  0.65,   // click-to-play fragment sound
-    cricket:   0.28,   // nighttime cricket ambient loop
-    birds:     0.30,   // daytime bird ambient loop
+    cricket:   1.00,   // nighttime cricket ambient loop
+    birds:     0.50,   // daytime bird ambient loop
+    caveDoor:  1.00,   // cave door reveal sound effect
   };
 
   // Fade-in durations (milliseconds)
@@ -444,10 +445,14 @@ For now, it is enough for me to keep going...
   const SND_PAGE_TURN = "sounds/ESM_Explainer_Video_One_Shot_Paper_Foley_Page_Turn_Flip_Next_3.wav";
   const SND_RIVER     = "sounds/RiverRunFlow_S08WR.83.wav";
   const SND_MUSIC     = "sounds/Silent Echoes of the Depths.wav";
+  const SND_CAVE_DOOR  = "sounds/cave door opens.wav";
 
   // ── Audio elements ──
   const audioPageTurn = new Audio(SND_PAGE_TURN);
   audioPageTurn.volume = VOLUME.pageTurn;
+
+  const audioCaveDoor = new Audio(SND_CAVE_DOOR);
+  audioCaveDoor.volume = VOLUME.caveDoor;
 
   // Use HTML Audio + WebAudio MediaElementSource for the river
   // (streams immediately instead of waiting for full 66MB download)
@@ -977,6 +982,8 @@ For now, it is enough for me to keep going...
           if (swapTo) {
             // perform a DOM image swap (e.g. replace the hatched egg with the secret egg)
             swapEggImage(swapTo);
+            audioCaveDoor.currentTime = 0;
+            audioCaveDoor.play().catch(() => {});
             const notice = tr.dataset.noticeText || tr.getAttribute('data-notice-text') || 'Something became visible in the glow..';
             showRevealNotice(notice, 3500);
           } else {
