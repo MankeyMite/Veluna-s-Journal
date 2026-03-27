@@ -315,7 +315,7 @@ Maybe both.
 I only know that sometimes, after watching others long enough, I can almost believe I could become easier to love if I learned the pattern well enough.
 That is the part I am most ashamed to write.</p>
 <p class="morse-clue" role="note" aria-hidden="false">
-        <span class="morse-text">-.-- --- .-. -.. ...</span>
+        <span class="morse-text">.-- --- .-. -.. ...</span>
         <span class="sr-only">Morse: words</span>
       </p>
     `
